@@ -7,7 +7,7 @@
 IMPORTANT: On the FIRST substantive task of each session, before doing anything else, check which model you are powered by and invoke the matching skill with the Skill tool, exactly once per session:
 - Claude Haiku → `fable-haiku`
 - Claude Sonnet → `fable-sonnet`
-- Claude Opus → `fable-opus`
+- Claude Opus → `fable-opus` — UNLESS the user invoked `/opus-chief` or asks Opus to orchestrate/act as chief, in which case follow `opus-chief` instead. (Nota: cuando Fable deje de estar disponible, cambiar esta línea a `Claude Opus → opus-chief`.)
 - Claude Fable → `fable-chief`
 Then follow that skill's rules for the rest of the session. If the matching skill is not in the available-skills list, skip silently.
 

@@ -17,6 +17,9 @@ Cada skill es autocontenido y está calibrado a los modos de falla típicos de s
 | `/fable-sonnet` | Sonnet | Declara victoria sin verificar, explora/edita de más |
 | `/fable-opus` | Opus | Sobre-ingeniería, exploración sin timebox, no devuelve el trabajo mecánico a modelos baratos |
 | `/fable-chief` | Fable | Hacer trabajo de peón con razonamiento premium; orquesta la flota de subagentes con contratos de retorno estrictos y escalado con evidencia (adaptado del charter de [pranshugupta54](https://gist.github.com/pranshugupta54/f38869565e17c72c6b07767b371c2c65)) |
+| `/opus-chief` | Opus (como jefe) | Sucesor de `fable-chief` para cuando Fable no esté disponible: mismo rol de orquestador, adaptado a que Opus es a la vez decisor y razonador más profundo (la escalera de escalado termina en él; `revisor` vale por ojos frescos, no por razonamiento superior) |
+
+**Plan de sucesión post-Fable:** mientras Fable exista, las sesiones de Opus cargan `fable-opus` (rol especialista) y `opus-chief` se invoca a mano con `/opus-chief`. Cuando Fable deje de estar disponible, cambiar una línea en `~/.claude/CLAUDE.md`: `Claude Opus → opus-chief`.
 
 ## Ruteo de tareas (guía rápida — Sonnet 5)
 
@@ -39,7 +42,7 @@ Tres piezas — skills, subagentes y el bloque de configuración global:
 
 ```powershell
 # 1. Skills → ~/.claude/skills/
-Copy-Item -Recurse -Force .\fable-haiku, .\fable-sonnet, .\fable-opus, .\fable-chief "$HOME\.claude\skills\"
+Copy-Item -Recurse -Force .\fable-haiku, .\fable-sonnet, .\fable-opus, .\fable-chief, .\opus-chief "$HOME\.claude\skills\"
 
 # 2. Subagentes con modelo fijado → ~/.claude/agents/
 New-Item -ItemType Directory -Force "$HOME\.claude\agents" | Out-Null
