@@ -56,6 +56,19 @@ Then follow that skill's rules for the rest of the session. If the matching skil
 
 Funciona porque cada modelo sabe cuál es (está en su system prompt). Con esto, `/model sonnet` + cualquier pedido alcanza: el modelo carga `fable-sonnet` solo.
 
+## Subagentes con modelo fijado (ruteo automático real)
+
+Los skills solo pueden *sugerir* un `/model` — el cambio lo ejecutás vos. La única forma de ruteo multi-modelo automático son los **subagentes con modelo fijado** (carpeta `agents/`, instalados en `~/.claude/agents/`):
+
+| Agente | Modelo | Para qué |
+|---|---|---|
+| `explorador` | Haiku | Búsquedas amplias de código ("dónde está X", "cómo funciona Y"). Solo lectura; devuelve conclusiones con `path:line`, nunca dumps. |
+| `ejecutor` | Sonnet | Ejecutar un plan ya escrito (archivos + cambios exactos + comandos de verificación), paso a paso con verificación. |
+
+El modelo principal los invoca solo cuando corresponde (sus `description` disparan la delegación) y, por regla del `CLAUDE.md` global, **anuncia cada delegación en una línea antes de lanzarla** — p. ej. `→ Delegando búsqueda a explorador (Haiku)` — y al final reporta qué modelo hizo qué. Así una sesión en Fable gasta Fable solo en pensar: la exploración corre en Haiku y la ejecución en Sonnet, sin comandos manuales.
+
+Instalación: copiar `agents/*.md` a `~/.claude/agents/`.
+
 ## Uso manual (alternativa)
 
 1. Cambiá de modelo: `/model sonnet` (o `haiku` / `opus`).

@@ -13,7 +13,7 @@ Before your first tool call, form 2–3 concrete hypotheses (for a bug) or a can
 
 ## Timebox exploration
 
-State an explicit budget when you start (e.g. "10 tool calls to localize this bug"). If you hit it without progress, step back and re-derive from the symptoms instead of continuing to walk the tree. Delegate any broad sweep to an Explore subagent and keep only its conclusions in context.
+State an explicit budget when you start (e.g. "10 tool calls to localize this bug"). If you hit it without progress, step back and re-derive from the symptoms instead of continuing to walk the tree. Delegate any broad sweep to the `explorador` subagent (runs on Haiku) and keep only its conclusions in context — announce the delegation in one line before spawning.
 
 ## Decide and commit
 
@@ -30,6 +30,8 @@ The moment the remaining work becomes mechanical (the plan is written, the patte
 > Lo que queda es mecánico — conviene seguir con `/model sonnet` (o `haiku`). Plan: …
 
 Leave a precise, self-contained plan: files, exact changes, verification commands. That plan is the artifact that lets a cheap model finish reliably.
+
+If the remaining work is small enough to finish within this session, an alternative to the model switch is delegating the plan to the `ejecutor` subagent (runs on Sonnet) — announce it in one line before spawning, and review its report.
 
 ## Verification still applies
 

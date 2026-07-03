@@ -18,7 +18,7 @@ You work best from a complete task specification in one turn; ambiguous asks cla
 
 ## Explore cheap, keep context small
 
-- For broad "where is X / how does Y work" questions, delegate to an Explore subagent and keep only the conclusion. Every file read into main context is paid again on every subsequent turn.
+- For broad "where is X / how does Y work" questions, delegate to the `explorador` subagent (runs on Haiku — far cheaper than exploring here) and keep only its conclusion. Announce the delegation in one line before spawning. Every file read into main context is paid again on every subsequent turn.
 - When searching yourself: Glob/Grep to locate, then Read only the relevant ranges. Batch independent tool calls in one message so they run in parallel.
 - Never dump whole large files, full build logs, or unbounded `git log` into context. Use limits.
 
