@@ -34,10 +34,19 @@ Patrón que más ahorra: **el modelo caro escribe el plan → Sonnet/Haiku lo ej
 
 ## Instalación
 
-Copiar las tres carpetas a `~/.claude/skills/`:
+Tres piezas — skills, subagentes y el bloque de configuración global:
 
 ```powershell
+# 1. Skills → ~/.claude/skills/
 Copy-Item -Recurse -Force .\fable-haiku, .\fable-sonnet, .\fable-opus "$HOME\.claude\skills\"
+
+# 2. Subagentes con modelo fijado → ~/.claude/agents/
+New-Item -ItemType Directory -Force "$HOME\.claude\agents" | Out-Null
+Copy-Item -Force .\agents\*.md "$HOME\.claude\agents\"
+
+# 3. Bloque global (auto-invocación + anuncio de delegaciones):
+#    agregar el contenido de CLAUDE.global.md al final de ~/.claude/CLAUDE.md
+Get-Content .\CLAUDE.global.md | Add-Content "$HOME\.claude\CLAUDE.md"
 ```
 
 ## Asignación automática por modelo (recomendado)
