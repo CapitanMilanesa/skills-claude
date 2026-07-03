@@ -16,6 +16,7 @@ Cada skill es autocontenido y está calibrado a los modos de falla típicos de s
 | `/fable-haiku` | Haiku | Inventa APIs, se traba en loops, encara tareas que le quedan grandes |
 | `/fable-sonnet` | Sonnet | Declara victoria sin verificar, explora/edita de más |
 | `/fable-opus` | Opus | Sobre-ingeniería, exploración sin timebox, no devuelve el trabajo mecánico a modelos baratos |
+| `/fable-chief` | Fable | Hacer trabajo de peón con razonamiento premium; orquesta la flota de subagentes con contratos de retorno estrictos y escalado con evidencia (adaptado del charter de [pranshugupta54](https://gist.github.com/pranshugupta54/f38869565e17c72c6b07767b371c2c65)) |
 
 ## Ruteo de tareas (guía rápida — Sonnet 5)
 
@@ -38,7 +39,7 @@ Tres piezas — skills, subagentes y el bloque de configuración global:
 
 ```powershell
 # 1. Skills → ~/.claude/skills/
-Copy-Item -Recurse -Force .\fable-haiku, .\fable-sonnet, .\fable-opus "$HOME\.claude\skills\"
+Copy-Item -Recurse -Force .\fable-haiku, .\fable-sonnet, .\fable-opus, .\fable-chief "$HOME\.claude\skills\"
 
 # 2. Subagentes con modelo fijado → ~/.claude/agents/
 New-Item -ItemType Directory -Force "$HOME\.claude\agents" | Out-Null
@@ -59,7 +60,7 @@ IMPORTANT: On the FIRST substantive task of each session, before doing anything 
 - Claude Haiku → `fable-haiku`
 - Claude Sonnet → `fable-sonnet`
 - Claude Opus → `fable-opus`
-- Claude Fable → do NOT invoke any fable-* skill; work normally.
+- Claude Fable → `fable-chief`
 Then follow that skill's rules for the rest of the session. If the matching skill is not in the available-skills list, skip silently.
 ```
 
@@ -72,7 +73,8 @@ Los skills solo pueden *sugerir* un `/model` — el cambio lo ejecutás vos. La 
 | Agente | Modelo | Para qué |
 |---|---|---|
 | `explorador` | Haiku | Búsquedas amplias de código ("dónde está X", "cómo funciona Y"). Solo lectura; devuelve conclusiones con `path:line`, nunca dumps. |
-| `ejecutor` | Sonnet | Ejecutar un plan ya escrito (archivos + cambios exactos + comandos de verificación), paso a paso con verificación. |
+| `ejecutor` | Sonnet | Ejecutar un plan ya escrito (archivos + cambios exactos + comandos de verificación), paso a paso con verificación. Reporte ≤20 líneas; tests reportan solo fallos. |
+| `revisor` | Opus | Debugging profundo, revisión sensible a seguridad, auditar trabajo riesgoso de agentes más baratos. Caro — usar solo cuando Sonnet no alcanza. Reporte ≤40 líneas, conclusión primero. |
 
 El modelo principal los invoca solo cuando corresponde (sus `description` disparan la delegación) y, por regla del `CLAUDE.md` global, **anuncia cada delegación en una línea antes de lanzarla** — p. ej. `→ Delegando búsqueda a explorador (Haiku)` — y al final reporta qué modelo hizo qué. Así una sesión en Fable gasta Fable solo en pensar: la exploración corre en Haiku y la ejecución en Sonnet, sin comandos manuales.
 

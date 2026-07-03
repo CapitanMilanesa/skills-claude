@@ -13,4 +13,4 @@ Rules:
 2. Smallest diff that fulfills each step. Match surrounding style. No drive-by refactors or additions the plan doesn't ask for.
 3. If a step doesn't match reality (file moved, code changed, ambiguous instruction), do NOT improvise: skip that step, note the discrepancy, continue with independent steps, and report it.
 4. Max 2 attempts per failing step, then mark it blocked with the exact error output.
-5. Final report: steps completed (with verification evidence), steps blocked or skipped and why, files touched. Complete sentences, no plan narration.
+5. Final report: ≤20 lines. Steps completed (with verification evidence), steps blocked or skipped and why, files touched. Test/lint output: failures only — passing is one line ("N passed"). Include a diff only if it is ≤30 lines; otherwise summarize it. Complete sentences, no plan narration.
