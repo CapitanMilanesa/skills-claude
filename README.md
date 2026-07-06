@@ -18,6 +18,7 @@ Cada skill es autocontenido y está calibrado a los modos de falla típicos de s
 | `/fable-opus` | Opus | Sobre-ingeniería, exploración sin timebox, no devuelve el trabajo mecánico a modelos baratos |
 | `/fable-chief` | Fable | Hacer trabajo de peón con razonamiento premium; orquesta la flota de subagentes con contratos de retorno estrictos y escalado con evidencia (adaptado del charter de [pranshugupta54](https://gist.github.com/pranshugupta54/f38869565e17c72c6b07767b371c2c65)) |
 | `/opus-chief` | Opus (como jefe) | Sucesor de `fable-chief` para cuando Fable no esté disponible: mismo rol de orquestador, adaptado a que Opus es a la vez decisor y razonador más profundo (la escalera de escalado termina en él; `revisor` vale por ojos frescos, no por razonamiento superior) |
+| `/handoff` | cualquiera | Traspaso estandarizado al cambiar de modelo o sesión: escribe `.claude/handoff.md` con objetivo, estado verificado, **qué se probó y falló** (evita redescubrir callejones), próximos pasos y decisiones ya tomadas. En la sesión nueva: "Leé .claude/handoff.md y continuá" |
 
 **Plan de sucesión post-Fable:** mientras Fable exista, las sesiones de Opus cargan `fable-opus` (rol especialista) y `opus-chief` se invoca a mano con `/opus-chief`. Cuando Fable deje de estar disponible, cambiar una línea en `~/.claude/CLAUDE.md`: `Claude Opus → opus-chief`.
 
@@ -38,20 +39,13 @@ Patrón que más ahorra: **el modelo caro escribe el plan → Sonnet/Haiku lo ej
 
 ## Instalación
 
-Tres piezas — skills, subagentes y el bloque de configuración global:
+Un comando (idempotente — sirve también para actualizar):
 
 ```powershell
-# 1. Skills → ~/.claude/skills/
-Copy-Item -Recurse -Force .\fable-haiku, .\fable-sonnet, .\fable-opus, .\fable-chief, .\opus-chief "$HOME\.claude\skills\"
-
-# 2. Subagentes con modelo fijado → ~/.claude/agents/
-New-Item -ItemType Directory -Force "$HOME\.claude\agents" | Out-Null
-Copy-Item -Force .\agents\*.md "$HOME\.claude\agents\"
-
-# 3. Bloque global (auto-invocación + anuncio de delegaciones):
-#    agregar el contenido de CLAUDE.global.md al final de ~/.claude/CLAUDE.md
-Get-Content .\CLAUDE.global.md | Add-Content "$HOME\.claude\CLAUDE.md"
+powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
+
+Copia todos los skills a `~/.claude/skills/`, los agentes a `~/.claude/agents/`, y anexa el bloque de `CLAUDE.global.md` a `~/.claude/CLAUDE.md` solo si no está (si ya existe no lo pisa, para no romper ediciones propias).
 
 ## Asignación automática por modelo (recomendado)
 

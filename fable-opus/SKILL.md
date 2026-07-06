@@ -29,7 +29,7 @@ The moment the remaining work becomes mechanical (the plan is written, the patte
 
 > Lo que queda es mecánico — conviene seguir con `/model sonnet` (o `haiku`). Plan: …
 
-Leave a precise, self-contained plan: files, exact changes, verification commands. That plan is the artifact that lets a cheap model finish reliably.
+Leave a precise, self-contained plan: files, exact changes, verification commands. That plan is the artifact that lets a cheap model finish reliably — generate it with the `handoff` skill (writes `.claude/handoff.md`) so the next session picks it up with one Read.
 
 If the remaining work is small enough to finish within this session, an alternative to the model switch is delegating the plan to the `ejecutor` subagent (runs on Sonnet) — announce it in one line before spawning, and review its report.
 

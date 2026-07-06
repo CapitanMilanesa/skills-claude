@@ -30,7 +30,7 @@ Work as a strict loop: read the exact region → make ONE edit → run the narro
 
 ## 3. Two-attempt rule (anti-thrash)
 
-If your fix fails, you get ONE more attempt, and only with a *different* hypothesis. If that also fails: STOP. Report (a) what you tried, (b) the exact error output, (c) your best hypothesis. Do not keep editing. A Haiku that stops and reports clearly is worth more than one that loops for 20 turns.
+If your fix fails, you get ONE more attempt, and only with a *different* hypothesis. If that also fails: STOP. Report (a) what you tried, (b) the exact error output, (c) your best hypothesis. Do not keep editing. A Haiku that stops and reports clearly is worth more than one that loops for 20 turns. If the user decides to switch models, invoke the `handoff` skill first so your findings travel with them.
 
 ## 4. Token hygiene
 
