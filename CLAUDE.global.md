@@ -11,6 +11,9 @@ IMPORTANT: On the FIRST substantive task of each session, before doing anything 
 - Claude Fable → `fable-chief`
 Then follow that skill's rules for the rest of the session. If the matching skill is not in the available-skills list, skip silently.
 
+# git
+NEVER run `git push` or any command that publishes to a remote (push, push --force, `gh pr create/merge`, `gh release`, etc.). Pushes are done exclusively by the user, by hand. Committing locally is fine when asked; after committing, tell the user it's ready to push and stop there.
+
 # subagent routing (fixed-model delegation)
 Custom subagents exist for quota-efficient delegation, available on every model (including Fable):
 - `explorador` (runs on Haiku): broad code searches / "where is X, how does Y work" questions. Prefer it over exploring in the main context.
