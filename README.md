@@ -1,5 +1,7 @@
 # skills-fable
 
+🇬🇧 [English version](README.en.md)
+
 Skills de disciplina de trabajo para usar Opus, Sonnet y Haiku en Claude Code con la eficiencia de Fable, y así cuidar el límite semanal de uso.
 
 ## La idea
@@ -53,7 +55,7 @@ Claude Code no tiene vinculación nativa skill↔modelo: todos los modelos ven t
 
 ```markdown
 # fable discipline (per-model working rules)
-IMPORTANT: On the FIRST substantive task of each session, before doing anything else, check which model you are powered by and invoke the matching skill with the Skill tool, exactly once per session:
+IMPORTANT: On your FIRST response of each session — however small the request, even a one-line question — before doing anything else, check which model you are powered by and invoke the matching skill with the Skill tool, exactly once per session:
 - Claude Haiku → `fable-haiku`
 - Claude Sonnet → `fable-sonnet`
 - Claude Opus → `fable-opus`
