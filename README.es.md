@@ -90,3 +90,7 @@ Instalación: copiar `agents/*.md` a `~/.claude/agents/`.
 ## Alternativa: siempre activo
 
 Si preferís no invocar nada, podés pegar las reglas comunes (búsqueda barata, diff mínimo, verificación, anti-thrash) en `~/.claude/CLAUDE.md` — se cargan en toda sesión, con cualquier modelo. Costo: esos tokens se pagan en cada sesión aunque no hagan falta.
+
+## Licencia
+
+[MIT](LICENSE) — usalo como quieras.

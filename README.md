@@ -95,4 +95,8 @@ If you'd rather not invoke anything, you can paste the shared rules (cheap searc
 
 ---
 
-*Auxiliary docs (`TESTING.md`, comments in `install.ps1` / `CLAUDE.global.md`) are in Spanish; the skill and agent definitions themselves are in English.*
+*Auxiliary docs (comments in `install.ps1` / `CLAUDE.global.md`) are in Spanish; the skill and agent definitions themselves are in English.*
+
+## License
+
+[MIT](LICENSE) — use it however you like.
