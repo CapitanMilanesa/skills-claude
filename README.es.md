@@ -1,8 +1,10 @@
 # skills-fable
 
-🇬🇧 [English version](README.md)
+🇬🇧 [English version](README.md) · 👥 [Guía rápida del equipo](USAGE.es.md)
 
 Skills de disciplina de trabajo para usar Opus, Sonnet y Haiku en Claude Code con la eficiencia de Fable, y así cuidar el límite semanal de uso.
+
+> ¿Sos nuevo y solo querés usarlo? Leé la **[guía rápida del equipo](USAGE.es.md)** — una carilla. El resto de este README es el cómo y el porqué.
 
 ## La idea
 
@@ -78,6 +80,20 @@ Los skills solo pueden *sugerir* un `/model` — el cambio lo ejecutás vos. La 
 El modelo principal los invoca solo cuando corresponde (sus `description` disparan la delegación) y, por regla del `CLAUDE.md` global, **anuncia cada delegación en una línea antes de lanzarla** — p. ej. `→ Delegando búsqueda a explorador (Haiku)` — y al final reporta qué modelo hizo qué. Así una sesión en Fable gasta Fable solo en pensar: la exploración corre en Haiku y la ejecución en Sonnet, sin comandos manuales.
 
 Instalación: copiar `agents/*.md` a `~/.claude/agents/`.
+
+## Hook de observabilidad (opcional)
+
+Un libro contable de delegaciones: escribe una línea JSONL por cada corrida de subagente en `~/.claude/delegation-log.jsonl`, para ver la flota trabajando y medir qué hace cada modelo. Es **solo observabilidad** — nunca bloquea, nunca falla un turno. (Se evaluó "forzar el cap de líneas rehaciendo el reporte" y se descartó: rehacer un subagente para recortar un reporte gasta mucha más cuota que leer el reporte largo una vez. Los caps viven en los prompts de los agentes; este hook solo hace *visibles* las violaciones.)
+
+`install.ps1` / `install.sh` copian el script a `~/.claude/hooks/`, pero **no** tocan tu `settings.json` (auto-editar la config ajena es más riesgo que beneficio). Para activarlo, agregá esto a `~/.claude/settings.json` bajo `hooks` (en macOS/Linux usá `python3`):
+
+```json
+"SubagentStop": [
+  { "hooks": [ { "type": "command", "command": "python \"$HOME/.claude/hooks/log-delegation.py\"", "shell": "bash", "timeout": 10 } ] }
+]
+```
+
+Los cambios en `settings.json` se toman en la sesión siguiente (o tras abrir `/hooks` una vez). El script loguea el payload completo del evento para no perder nada mientras se refina la extracción de campos con datos reales.
 
 ## Uso manual (alternativa)
 

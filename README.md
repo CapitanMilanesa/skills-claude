@@ -1,8 +1,10 @@
 # skills-fable
 
-🇪🇸 [Versión en español](README.es.md)
+🇪🇸 [Versión en español](README.es.md) · 👥 [Team quick guide](USAGE.md)
 
 Working-discipline skills for running Opus, Sonnet and Haiku in Claude Code with Fable-level efficiency — and protecting your weekly usage limit.
+
+> New to this and just want to use it? Read the **[team quick guide](USAGE.md)** — one page. The rest of this README is the how-and-why.
 
 ## The idea
 
@@ -80,6 +82,20 @@ Skills can only *suggest* a `/model` switch — you execute it. The only genuine
 The main model invokes them on its own when appropriate (their `description` fields trigger the delegation) and, per the global `CLAUDE.md` rule, **announces every delegation in one line before spawning** — e.g. `→ Delegating search to explorador (Haiku)` — and reports at the end which model did which part. That way a Fable session spends Fable only on thinking: exploration runs on Haiku and execution on Sonnet, with no manual commands.
 
 Installation: copy `agents/*.md` to `~/.claude/agents/`.
+
+## Observability hook (optional)
+
+A delegation ledger: logs one JSONL line per subagent run to `~/.claude/delegation-log.jsonl` so you can see the fleet working and measure what each model does. It's **observability only** — never blocks, never fails a turn. (Hard "enforce the report line-cap by re-running the agent" was considered and dropped: re-running a subagent to trim a report costs far more quota than reading the long report once. The caps live in the agent prompts; this hook just makes violations *visible*.)
+
+`install.ps1` / `install.sh` copy the script to `~/.claude/hooks/`, but do **not** touch your `settings.json` (auto-editing someone's settings is riskier than it's worth). To activate, add this to `~/.claude/settings.json` under `hooks` (use `python3` on macOS/Linux):
+
+```json
+"SubagentStop": [
+  { "hooks": [ { "type": "command", "command": "python \"$HOME/.claude/hooks/log-delegation.py\"", "shell": "bash", "timeout": 10 } ] }
+]
+```
+
+Changes to `settings.json` are picked up on the next session (or after opening `/hooks` once). The script logs the full event payload so nothing is lost while the exact field extraction is refined against real data.
 
 ## Manual use (alternative)
 

@@ -23,7 +23,18 @@ Get-ChildItem (Join-Path $repo "agents") -Filter *.md | ForEach-Object {
     Write-Host ("  agente  " + $_.BaseName)
 }
 
-# 3. Bloque global -> ~/.claude/CLAUDE.md (solo si no esta ya)
+# 3. Hooks (scripts) -> ~/.claude/hooks/  (solo copia los scripts; NO toca settings.json)
+$hooksSrc = Join-Path $repo "hooks"
+if (Test-Path $hooksSrc) {
+    $hooksDir = Join-Path $claudeDir "hooks"
+    New-Item -ItemType Directory -Force $hooksDir | Out-Null
+    Get-ChildItem $hooksSrc -Filter *.py | ForEach-Object {
+        Copy-Item -Force $_.FullName $hooksDir
+        Write-Host ("  hook    " + $_.Name + " (activar a mano en settings.json - ver README)")
+    }
+}
+
+# 4. Bloque global -> ~/.claude/CLAUDE.md (solo si no esta ya)
 $claudeMd = Join-Path $claudeDir "CLAUDE.md"
 $block = Get-Content (Join-Path $repo "CLAUDE.global.md") -Raw
 if (-not (Test-Path $claudeMd)) {
