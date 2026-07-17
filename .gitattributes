@@ -1,0 +1,6 @@
+# Los scripts deben tener finales de línea LF sí o sí, aunque se editen en Windows:
+# bash/python con CRLF (\r) fallan en macOS/Linux.
+*.sh   text eol=lf
+*.py   text eol=lf
+# El resto: normalizar a LF en el repo, respetar el SO al hacer checkout.
+*      text=auto
