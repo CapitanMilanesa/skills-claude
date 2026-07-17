@@ -85,7 +85,7 @@ Installation: copy `agents/*.md` to `~/.claude/agents/`.
 
 ## Observability hook (optional)
 
-A delegation ledger: logs one JSONL line per subagent run to `~/.claude/delegation-log.jsonl` so you can see the fleet working and measure what each model does. It's **observability only** — never blocks, never fails a turn. (Hard "enforce the report line-cap by re-running the agent" was considered and dropped: re-running a subagent to trim a report costs far more quota than reading the long report once. The caps live in the agent prompts; this hook just makes violations *visible*.)
+A delegation ledger: logs one JSONL line per subagent run to `~/.claude/delegation-log.jsonl` with clean metrics — which agent ran, how many lines its report had, its contract cap, and whether it went over. When a report exceeds its cap it also prints a one-line warning (only on the violation — signal, not noise). It's **observability only** — never blocks, never fails a turn. (Hard "enforce the cap by re-running the agent" was considered and dropped: re-running a subagent to trim a report costs far more quota than reading the long report once. The caps live in the agent prompts; this hook makes violations *visible* and *countable*.)
 
 `install.ps1` / `install.sh` copy the script to `~/.claude/hooks/`, but do **not** touch your `settings.json` (auto-editing someone's settings is riskier than it's worth). To activate, add this to `~/.claude/settings.json` under `hooks` (use `python3` on macOS/Linux):
 
@@ -95,7 +95,7 @@ A delegation ledger: logs one JSONL line per subagent run to `~/.claude/delegati
 ]
 ```
 
-Changes to `settings.json` are picked up on the next session (or after opening `/hooks` once). The script logs the full event payload so nothing is lost while the exact field extraction is refined against real data.
+Changes to `settings.json` are picked up on the next session (or after opening `/hooks` once).
 
 ## Manual use (alternative)
 

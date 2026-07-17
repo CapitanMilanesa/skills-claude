@@ -83,7 +83,7 @@ Instalación: copiar `agents/*.md` a `~/.claude/agents/`.
 
 ## Hook de observabilidad (opcional)
 
-Un libro contable de delegaciones: escribe una línea JSONL por cada corrida de subagente en `~/.claude/delegation-log.jsonl`, para ver la flota trabajando y medir qué hace cada modelo. Es **solo observabilidad** — nunca bloquea, nunca falla un turno. (Se evaluó "forzar el cap de líneas rehaciendo el reporte" y se descartó: rehacer un subagente para recortar un reporte gasta mucha más cuota que leer el reporte largo una vez. Los caps viven en los prompts de los agentes; este hook solo hace *visibles* las violaciones.)
+Un libro contable de delegaciones: escribe una línea JSONL por cada corrida de subagente en `~/.claude/delegation-log.jsonl` con métricas limpias — qué agente corrió, cuántas líneas tuvo su reporte, su cap de contrato, y si se pasó. Cuando un reporte viola su cap, además imprime un aviso de una línea (solo en la violación — señal, no ruido). Es **solo observabilidad** — nunca bloquea, nunca falla un turno. (Se evaluó "forzar el cap rehaciendo el reporte" y se descartó: rehacer un subagente para recortar un reporte gasta mucha más cuota que leerlo largo una vez. Los caps viven en los prompts de los agentes; este hook hace las violaciones *visibles* y *contables*.)
 
 `install.ps1` / `install.sh` copian el script a `~/.claude/hooks/`, pero **no** tocan tu `settings.json` (auto-editar la config ajena es más riesgo que beneficio). Para activarlo, agregá esto a `~/.claude/settings.json` bajo `hooks` (en macOS/Linux usá `python3`):
 
@@ -93,7 +93,7 @@ Un libro contable de delegaciones: escribe una línea JSONL por cada corrida de 
 ]
 ```
 
-Los cambios en `settings.json` se toman en la sesión siguiente (o tras abrir `/hooks` una vez). El script loguea el payload completo del evento para no perder nada mientras se refina la extracción de campos con datos reales.
+Los cambios en `settings.json` se toman en la sesión siguiente (o tras abrir `/hooks` una vez).
 
 ## Uso manual (alternativa)
 
