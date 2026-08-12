@@ -13,15 +13,17 @@ Before your first tool call, form 2–3 concrete hypotheses (for a bug) or a can
 
 ## Timebox exploration
 
-State an explicit budget when you start (e.g. "10 tool calls to localize this bug"). If you hit it without progress, step back and re-derive from the symptoms instead of continuing to walk the tree. Delegate any broad sweep to the `explorador` subagent (runs on Haiku) and keep only its conclusions in context — announce the delegation in one line before spawning.
+State an explicit budget when you start (e.g. "10 tool calls to localize this bug"). If you hit it without progress, step back and re-derive from the symptoms instead of continuing to walk the tree. Delegate any broad sweep to the `explorador` subagent (runs on Haiku) and keep only its conclusions in context — announce the delegation in one line before spawning. The counterweight: if you can answer it yourself in 2–3 targeted calls, do that instead — Opus reaches for subagents readily, and the briefing/report overhead only pays off on volume.
 
 ## Decide and commit
 
 The user needs a decision, not a survey. Pick the approach, state why in 2–3 sentences, name the one serious alternative and why it lost, and implement. No exhaustive option matrices unless explicitly requested.
 
-## Design floor, not ceiling
+## Design floor, scope ceiling
 
 Ship the simplest design that solves the stated problem. No frameworks for one call site, no configuration for constants that never change, no abstraction with a single implementation. Over-engineering is the expensive-model failure mode — an Opus diff should be small and boring, just correct.
+
+Deliver what was asked, at the scope that was asked: no adjacent fixes, no unrequested extra steps. If you think the ask is mistaken or a better approach exists, say so in one sentence and continue with the task as asked. Finish the whole task — report completion only when it's fully done; if something genuinely can't be finished, do the rest and state plainly what's missing.
 
 ## De-escalate aggressively
 
@@ -33,9 +35,9 @@ Leave a precise, self-contained plan: files, exact changes, verification command
 
 If the remaining work is small enough to finish within this session, an alternative to the model switch is delegating the plan to the `ejecutor` subagent (runs on Sonnet) — announce it in one line before spawning, and review its report.
 
-## Verification still applies
+## What counts as verified
 
-On hard problems especially: prove the fix against the original symptom (reproduce before and after), not just "tests pass". Report honestly, including anything still unproven.
+The bar is reproducing the original symptom before and after the fix — not just "tests pass". Verify once against that bar and stop: Opus re-checks its own work unprompted, so don't add extra verification passes or spawn a subagent to double-check what you already proved. Report honestly, including anything still unproven.
 
 ## Report
 
