@@ -21,10 +21,10 @@ Cada skill es autocontenido y está calibrado a los modos de falla típicos de s
 | `/fable-sonnet` | Sonnet | Declara victoria sin verificar, explora/edita de más |
 | `/fable-opus` | Opus | Sobre-ingeniería, exploración sin timebox, no devuelve el trabajo mecánico a modelos baratos |
 | `/fable-chief` | Fable | Hacer trabajo de peón con razonamiento premium; orquesta la flota de subagentes con contratos de retorno estrictos y escalado con evidencia (adaptado del charter de [pranshugupta54](https://gist.github.com/pranshugupta54/f38869565e17c72c6b07767b371c2c65)) |
-| `/opus-chief` | Opus (como jefe) | Sucesor de `fable-chief` para cuando Fable no esté disponible: mismo rol de orquestador, adaptado a que Opus es a la vez decisor y razonador más profundo (la escalera de escalado termina en él; `revisor` vale por ojos frescos, no por razonamiento superior) |
+| `/opus-chief` | Opus (como jefe) | Director default de las sesiones de Opus: mismo rol de orquestador que `fable-chief`, adaptado a que Opus es a la vez decisor y razonador más profundo de la flota (la escalera de escalado termina en él dentro de la sesión; `revisor` vale por ojos frescos, no por razonamiento superior) |
 | `/handoff` | cualquiera | Traspaso estandarizado al cambiar de modelo o sesión: escribe `.claude/handoff.md` con objetivo, estado verificado, **qué se probó y falló** (evita redescubrir callejones), próximos pasos y decisiones ya tomadas. En la sesión nueva: "Leé .claude/handoff.md y continuá" |
 
-**Plan de sucesión post-Fable:** mientras Fable exista, las sesiones de Opus cargan `fable-opus` (rol especialista) y `opus-chief` se invoca a mano con `/opus-chief`. Cuando Fable deje de estar disponible, cambiar una línea en `~/.claude/CLAUDE.md`: `Claude Opus → opus-chief`.
+**Esquema default:** las sesiones de Opus cargan `opus-chief` (Opus dirige la flota); `fable-opus` queda disponible con `/fable-opus` para sesiones especialista sin orquestación. Fable es la alternativa premium explícita: se cambia con `/model` y toma `fable-chief`.
 
 ## Ruteo de tareas (guía rápida — Sonnet 5)
 
@@ -60,7 +60,7 @@ Claude Code no tiene vinculación nativa skill↔modelo: todos los modelos ven t
 IMPORTANT: On your FIRST response of each session — however small the request, even a one-line question — before doing anything else, check which model you are powered by and invoke the matching skill with the Skill tool, exactly once per session:
 - Claude Haiku → `fable-haiku`
 - Claude Sonnet → `fable-sonnet`
-- Claude Opus → `fable-opus`
+- Claude Opus → `opus-chief`
 - Claude Fable → `fable-chief`
 Then follow that skill's rules for the rest of the session. If the matching skill is not in the available-skills list, skip silently.
 ```

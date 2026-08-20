@@ -7,8 +7,8 @@
 IMPORTANT: On your FIRST response of each session — however small the request, even a one-line question — before doing anything else, check which model you are powered by and invoke the matching skill with the Skill tool, exactly once per session:
 - Claude Haiku → `fable-haiku`
 - Claude Sonnet → `fable-sonnet`
-- Claude Opus → `fable-opus` — UNLESS the user invoked `/opus-chief` or asks Opus to orchestrate/act as chief, in which case follow `opus-chief` instead. (Nota: cuando Fable deje de estar disponible, cambiar esta línea a `Claude Opus → opus-chief`.)
-- Claude Fable → `fable-chief`
+- Claude Opus → `opus-chief` (Opus directs the fleet by default) — UNLESS the user invoked `/fable-opus` or asks for the plain specialist discipline (work directly, no orchestration), in which case follow `fable-opus` instead.
+- Claude Fable → `fable-chief` (Fable es la alternativa premium explícita: se cambia a mano con `/model` cuando el problema lo amerita)
 Then follow that skill's rules for the rest of the session. If the matching skill is not in the available-skills list, skip silently.
 
 # git

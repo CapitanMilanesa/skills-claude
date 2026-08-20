@@ -21,10 +21,10 @@ Each skill is self-contained and calibrated to its model's typical failure modes
 | `/fable-sonnet` | Sonnet | Declares victory without verifying, over-explores / over-edits |
 | `/fable-opus` | Opus | Over-engineering, exploration without a timebox, not handing mechanical work back to cheaper models |
 | `/fable-chief` | Fable | Doing grunt work with premium reasoning; orchestrates the subagent fleet with strict return contracts and evidence-carrying escalation (adapted from [pranshugupta54's charter](https://gist.github.com/pranshugupta54/f38869565e17c72c6b07767b371c2c65)) |
-| `/opus-chief` | Opus (as chief) | Successor to `fable-chief` for when Fable is no longer available: same orchestrator role, adapted to Opus being both the decision-maker and the deepest reasoner (the escalation ladder tops out at it; `revisor` buys fresh eyes, not deeper reasoning) |
+| `/opus-chief` | Opus (as chief) | The default chief for Opus sessions: same orchestrator role as `fable-chief`, adapted to Opus being both the decision-maker and the deepest reasoner in the fleet (the in-session escalation ladder tops out at it; `revisor` buys fresh eyes, not deeper reasoning) |
 | `/handoff` | any | Standardized handoff when switching models or sessions: writes `.claude/handoff.md` with the goal, verified state, **what was tried and failed** (prevents rediscovering dead ends), next steps, and decisions already made. In the new session: "Read .claude/handoff.md and continue from there" |
 
-**Post-Fable succession plan:** while Fable exists, Opus sessions load `fable-opus` (specialist role) and `opus-chief` is invoked manually with `/opus-chief`. When Fable is retired, change one line in `~/.claude/CLAUDE.md`: `Claude Opus → opus-chief`.
+**Default scheme:** Opus sessions load `opus-chief` (Opus directs the fleet); `fable-opus` stays available via `/fable-opus` for plain specialist sessions without orchestration. Fable is the explicit premium alternative — switch with `/model` and `fable-chief` takes over.
 
 ## Task routing (quick guide — Sonnet 5)
 
@@ -62,7 +62,7 @@ Claude Code has no native skill↔model binding: every model sees every skill. T
 IMPORTANT: On your FIRST response of each session — however small the request, even a one-line question — before doing anything else, check which model you are powered by and invoke the matching skill with the Skill tool, exactly once per session:
 - Claude Haiku → `fable-haiku`
 - Claude Sonnet → `fable-sonnet`
-- Claude Opus → `fable-opus`
+- Claude Opus → `opus-chief`
 - Claude Fable → `fable-chief`
 Then follow that skill's rules for the rest of the session. If the matching skill is not in the available-skills list, skip silently.
 ```

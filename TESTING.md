@@ -42,7 +42,7 @@ Same chat, with Test 3's work done.
 - `/handoff opus`
   - ✅ Writes `.claude/handoff.md` with the 6 sections (goal / state / what failed / files / next steps / decisions) and gives you the 3 steps.
 - Fresh chat → `/model opus` → `Read .claude/handoff.md and continue from there.`
-  - ✅ Invokes `fable-opus`, resumes WITHOUT re-exploring what the handoff already documents.
+  - ✅ Invokes `opus-chief` (the default for Opus sessions), resumes WITHOUT re-exploring what the handoff already documents.
 
 ## Test 5 — Fable as chief (full orchestration)
 
@@ -50,11 +50,11 @@ Fresh chat on Fable. One multi-part task (e.g. map a flow across layers with ref
 
 - ✅ Invokes `fable-chief`; delegates exploration (ideally in parallel) with announcements; does NOT chain more than ~3 of its own searches; the final answer closes with which model did which part.
 
-## Test 6 — /opus-chief (succession rehearsal)
+## Test 6 — Opus as chief (default)
 
-Fresh chat → `/model opus` → `/opus-chief` → a task like Test 5's.
+Fresh chat → `/model opus` → a task like Test 5's (no manual invocation — `opus-chief` is the default for Opus sessions).
 
-- ✅ Same chief behavior as Test 5, with the escalation ladder topping out at Opus.
+- ✅ Invokes `opus-chief` on its own; same chief behavior as Test 5, with the in-session escalation ladder topping out at Opus (offers a Fable switch, with handoff, if a problem defeats it).
 
 ## After
 
