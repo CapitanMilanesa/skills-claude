@@ -28,6 +28,8 @@ Switch with `/model`. The weekly limit burns by cost: **Haiku ≪ Sonnet ≪ Opu
 
 Rule of thumb: **start on Sonnet.** Down to Haiku for the mechanical stuff, up to Opus only when needed.
 
+**Not just for code:** documents, spreadsheets, analysis, emails — same rule (extract/format → Haiku; write/analyze → Sonnet). And Claude doesn't invent data: if something isn't in the source, it says so.
+
 ## 3. You don't invoke anything
 
 At session start Claude detects its model and **loads its discipline on its own**. Two normal things you'll see:

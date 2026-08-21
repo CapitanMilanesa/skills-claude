@@ -49,7 +49,9 @@ Un comando (idempotente — sirve también para actualizar):
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-Copia todos los skills a `~/.claude/skills/`, los agentes a `~/.claude/agents/`, y anexa el bloque de `CLAUDE.global.md` a `~/.claude/CLAUDE.md` solo si no está (si ya existe no lo pisa, para no romper ediciones propias).
+Copia todos los skills a `~/.claude/skills/`, los agentes a `~/.claude/agents/`, y mantiene al día el bloque de `CLAUDE.global.md` dentro de `~/.claude/CLAUDE.md`: el bloque vive entre marcadores versionados `<!-- fable-discipline vN -->`, así que el instalador lo reemplaza cuando el repo sube la versión — y nunca toca nada que tengas fuera de los marcadores. (Un bloque viejo sin marcadores se avisa, no se pisa: borralo una vez, re-corré el script, y de ahí en adelante se actualiza solo.)
+
+En macOS/Linux: `bash install.sh` (espejo del instalador de PowerShell).
 
 ## Asignación automática por modelo (recomendado)
 

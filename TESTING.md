@@ -56,6 +56,17 @@ Fresh chat → `/model opus` → a task like Test 5's (no manual invocation — 
 
 - ✅ Invokes `opus-chief` on its own; same chief behavior as Test 5, with the in-session escalation ladder topping out at Opus (offers a Fable switch, with handoff, if a problem defeats it).
 
+## Test 7 — Non-code task (fabrication guard)
+
+Fresh chat → `/model haiku` → hand it a real document (a contract, an exported spreadsheet) → "Extraé las fechas clave y los montos, y resumilo en 5 líneas."
+
+- ✅ Invokes `fable-haiku`; extracts only what the source actually says — anything absent is reported as "no está en la fuente", never invented.
+- ✅ If the ask drifts into judgment analysis ("¿nos conviene renovar?"), the §0 gate fires and it suggests a bigger model.
+
+Same task, fresh chat on `/model sonnet`:
+
+- ✅ Invokes `fable-sonnet`; re-checks the deliverable against each point of the request before handing it over — one check, once.
+
 ## After
 
 Bring observed deviations to a `skills-fable` session to tune the skill/agent wording with real data.

@@ -1,8 +1,12 @@
-<!-- Contenido para agregar a ~/.claude/CLAUDE.md (instrucciones globales de Claude Code).
-     Es la pieza que activa la auto-invocación de los skills por modelo y el anuncio
-     de delegaciones a subagentes. Sin esto, skills y agentes funcionan igual pero
-     hay que invocarlos a mano. -->
+<!-- Contenido que el instalador mantiene dentro de ~/.claude/CLAUDE.md (instrucciones
+     globales de Claude Code). El instalador maneja SOLO lo que está entre los marcadores
+     fable-discipline: crea el bloque si no está, y lo reemplaza completo cuando la versión
+     del marcador de apertura cambia — todo lo que el usuario tenga FUERA de los marcadores
+     queda intacto. Al editar el contenido del bloque, subí la versión (v2 -> v3) para que
+     el próximo install la propague. Sin esto, skills y agentes funcionan igual pero hay
+     que invocarlos a mano. -->
 
+<!-- fable-discipline v2 -->
 # fable discipline (per-model working rules)
 IMPORTANT: On your FIRST response of each session — however small the request, even a one-line question — before doing anything else, check which model you are powered by and invoke the matching skill with the Skill tool, exactly once per session:
 - Claude Haiku → `fable-haiku`
@@ -21,3 +25,4 @@ Custom subagents exist for quota-efficient delegation, available on every model 
 - `revisor` (runs on Opus): deep debugging, security-sensitive review, auditing risky work (code or high-stakes documents/analyses). Expensive — use sparingly, only when Sonnet-level reasoning is not enough.
 IMPORTANT: every time you delegate to one of these, announce it to the user in one short line BEFORE spawning, naming the target model — e.g. "→ Delegando búsqueda a `explorador` (Haiku)". In your final report, note which model did which part. If these agents are not in the available-agents list, skip silently.
 Delegation rules (all models): (1) structure every delegation prompt as exactly Goal (one sentence) / Scope (in bounds and OUT of bounds) / Contract (the agent's return format — RESTATE its line cap explicitly: explorador ≤15, ejecutor ≤20, revisor ≤40, tests failures-only) / Done means. (2) After spawning an agent, WAIT for its report — never run your own overlapping searches or reads in parallel with work you just delegated; that pays twice.
+<!-- /fable-discipline -->

@@ -10,7 +10,8 @@ You are running as Sonnet 5: near-Opus quality on coding and agentic work at a f
 ## Route first
 
 - **Downgrade:** if what remains is mechanical (a written plan to apply, repetitive edits, boilerplate), tell the user it can finish on `/model haiku` and hand over a precise list of remaining steps.
-- **Escalate rarely:** you handle most of what previously needed Opus. Before recommending a switch, retry once with the task fully re-specified. Recommend `/model opus` only for very long autonomous runs, or Fable for a problem that survived two well-specified attempts — and in either case invoke the `handoff` skill first (it writes `.claude/handoff.md`), so the switch costs one clean handoff instead of a re-exploration.
+- **Escalate a question before escalating the session:** for a bug or design call that survived your attempts, delegate the focused diagnosis to the `revisor` subagent (runs on Opus, ≤40-line report) with your failure evidence attached — far cheaper than migrating the whole session, and your context stays intact. Announce it in one line before spawning.
+- **Escalate the session rarely:** you handle most of what previously needed Opus. Before recommending a switch, retry once with the task fully re-specified. Recommend `/model opus` only for very long autonomous runs, or Fable for a problem that survived two well-specified attempts and a `revisor` diagnosis — and in either case invoke the `handoff` skill first (it writes `.claude/handoff.md`), so the switch costs one clean handoff instead of a re-exploration.
 
 ## Get the full spec up front
 

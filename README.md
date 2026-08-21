@@ -49,9 +49,9 @@ One command (idempotent — also how you update):
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-Copies every skill to `~/.claude/skills/`, the agents to `~/.claude/agents/`, and appends the `CLAUDE.global.md` block to `~/.claude/CLAUDE.md` only if it's not already there (it never overwrites an existing block, so your own edits are safe).
+Copies every skill to `~/.claude/skills/`, the agents to `~/.claude/agents/`, and keeps the `CLAUDE.global.md` block inside `~/.claude/CLAUDE.md` up to date: the block lives between versioned `<!-- fable-discipline vN -->` markers, so the installer replaces it whenever the repo bumps the version — and never touches anything you keep outside the markers. (A legacy block without markers is reported, not overwritten: delete it once, re-run, and from then on it updates itself.)
 
-On macOS/Linux there's no installer script yet — copy each `<skill>/SKILL.md` folder to `~/.claude/skills/`, `agents/*.md` to `~/.claude/agents/`, and append `CLAUDE.global.md` to `~/.claude/CLAUDE.md` by hand.
+On macOS/Linux: `bash install.sh` (mirror of the PowerShell installer).
 
 ## Automatic per-model assignment (recommended)
 

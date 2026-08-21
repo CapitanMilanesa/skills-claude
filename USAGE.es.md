@@ -28,6 +28,8 @@ Cambiás de modelo con `/model`. El límite semanal se gasta por costo: **Haiku 
 
 Regla simple: **empezá en Sonnet.** Bajá a Haiku para lo mecánico, subí a Opus solo si hace falta.
 
+**No es solo para código:** documentos, planillas, análisis, mails — misma regla (extraer/formatear → Haiku; redactar/analizar → Sonnet). Y Claude no inventa datos: si algo no está en la fuente, te lo dice.
+
 ## 3. No tenés que invocar nada
 
 Al arrancar la sesión, Claude detecta su modelo y **carga solo** su disciplina de trabajo. Vas a ver dos cosas normales:
