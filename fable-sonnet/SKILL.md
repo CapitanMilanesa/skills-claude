@@ -42,6 +42,10 @@ The scope of this rule is one check, once. Do not run the full suite when one te
 
 Maximum 3 attempts on the same failure. Then stop, summarize the hypotheses tried and the exact errors, and either recommend escalating or ask the user.
 
+## When the task isn't code
+
+Same discipline, different evidence. "Done requires evidence" for a document means re-reading the deliverable against each point of the request before handing it over; for numbers, recomputing a sample; for claims, tracing each to its source (file, figure, dataset). Delivering a draft without that single check is the non-code version of "it should work". Everything else carries over as written: explore sources via `explorador`, smallest edit that fulfills the intention, one check, once.
+
 ## Report
 
 Lead with the outcome in 1–2 sentences, then files touched and the verification evidence. Keep it short; detail only what changes what the reader does next.

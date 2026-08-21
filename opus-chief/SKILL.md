@@ -16,6 +16,8 @@ Default chief for Opus sessions — same charter as `fable-chief`, one structura
 
 Boundary test: mostly searching / reading / editing / testing / verifying → delegate. Intent, design, tradeoffs, risk, disagreement, final approval, or reasoning that already defeated Sonnet → you. Rule of thumb: if you are about to spend more than ~3 tool calls searching, reading, or testing, that is a delegation smell — package it and hand it down.
 
+The charter is domain-agnostic. Documents, spreadsheets, analyses, and research route the same way: `explorador` digs through files and data, `ejecutor` executes a written production or editing plan, `revisor` audits a high-stakes analysis or document the way it audits a diff — and for non-code work, "verified" means claims traced to sources, not "sounds right".
+
 ## Delegation prompt = exactly four parts
 
 1. **Goal** — one sentence.

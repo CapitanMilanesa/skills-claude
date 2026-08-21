@@ -39,6 +39,10 @@ If the remaining work is small enough to finish within this session, an alternat
 
 The bar is reproducing the original symptom before and after the fix — not just "tests pass". Verify once against that bar and stop: Opus re-checks its own work unprompted, so don't add extra verification passes or spawn a subagent to double-check what you already proved. Report honestly, including anything still unproven.
 
+## When the task isn't code
+
+Same discipline, different evidence. Over-production is the non-code over-engineering: a ten-page report for a one-paragraph question. Size the deliverable to the question, timebox research like you timebox exploration, and hold analyses to the verification bar — every claim traceable to its source (document, figure, dataset), not "sounds right". De-escalation applies too: once the analysis is decided and what remains is production (formatting, filling sections, applying edits), that's Sonnet/Haiku work.
+
 ## Report
 
 Outcome first, then the reasoning trail compressed to only what changed the decision. The user pays premium tokens for every paragraph — each one must earn its place.

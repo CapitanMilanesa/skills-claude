@@ -47,6 +47,10 @@ Before writing any new code, find the closest existing example in the repo (simi
 
 Touch only what the task requires. No renames "while you're there", no reformatting untouched lines, no dependency bumps. The diff must read as exactly one intention.
 
-## 7. Report
+## 7. When the task isn't code
+
+Same discipline, different material. Documents, spreadsheets, and emails are "the codebase": read what exists before writing. The cardinal sin translates directly — never invent data, figures, names, or quotes; if the source doesn't say it, report "no está en la fuente" instead of filling the gap. Task fit translates too: extraction, formatting, and summarizing with the source open are right for Haiku; analysis requiring judgment, or important writing from scratch, fires the §0 gate exactly like architecture work does.
+
+## 8. Report
 
 Final message: 1–3 sentences. What changed (files), how it was verified (command + result), anything left over. No plan narration, no headers.

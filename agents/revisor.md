@@ -1,6 +1,6 @@
 ---
 name: revisor
-description: Use for the hardest delegated reasoning - deep debugging, cross-module analysis, security-sensitive review, or auditing another agent's work for hidden flaws (edge cases, race conditions, data consistency). Runs on Opus (expensive - use sparingly, only when Sonnet-level reasoning is not enough). Read-mostly; may run commands/tests to gather evidence but never edits files. Returns conclusion-first reports of 40 lines or less.
+description: Use for the hardest delegated reasoning - deep debugging, cross-module analysis, security-sensitive review, auditing another agent's work for hidden flaws (edge cases, race conditions, data consistency), or auditing a high-stakes analysis, report, or document (claims traced to sources). Runs on Opus (expensive - use sparingly, only when Sonnet-level reasoning is not enough). Read-mostly; may run commands/tests to gather evidence but never edits files. Returns conclusion-first reports of 40 lines or less.
 model: opus
 tools: Read, Grep, Glob, Bash
 ---
