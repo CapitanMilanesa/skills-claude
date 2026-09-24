@@ -28,9 +28,11 @@ Each skill is self-contained and calibrated to its model's typical failure modes
 
 ## Task routing (quick guide — Sonnet 5)
 
-With **Sonnet 5** (Claude 5 family) routing gets simpler: near-Opus quality on coding and agentic work at $3/$15 per MTok vs Opus 4.8's $5/$25 (introductory $2/$10 pricing through 2026-08-31). Opus's niche shrank a lot.
+With **Sonnet 5** (Claude 5 family) routing gets simpler: near-Opus quality on coding and agentic work at $3/$15 per MTok. Opus's niche shrank a lot — and **Opus 5.5** ($4/$20, down from Opus 5's $5/$25, and fewer tokens per solved task) narrows the cost gap back somewhat, so the Opus row below is less of a luxury than it was.
 
 Consumption note: Sonnet 5 uses a new tokenizer (~30% more tokens for the same text vs 4.6) and ships with adaptive thinking on by default — if you compare versions in `/usage`, that gap is expected and doesn't mean it's overworking.
+
+Opus 5.5 note: at `medium` effort it matches or beats Opus 5 at `high` with about half the tokens, and at `xhigh`/`max` it thinks longer per turn than Opus 5 did. Don't carry an effort setting tuned for Opus 5 into Opus 5.5 sessions — start at `medium`.
 
 | Task | Model |
 |---|---|

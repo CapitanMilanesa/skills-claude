@@ -28,9 +28,11 @@ Cada skill es autocontenido y está calibrado a los modos de falla típicos de s
 
 ## Ruteo de tareas (guía rápida — Sonnet 5)
 
-Con **Sonnet 5** (familia Claude 5) el ruteo se simplifica: alcanza calidad casi-Opus en código y trabajo agéntico a $3/$15 por MTok vs $5/$25 de Opus 4.8 (precio introductorio $2/$10 hasta el 31/08/2026). El nicho de Opus se achicó mucho.
+Con **Sonnet 5** (familia Claude 5) el ruteo se simplifica: alcanza calidad casi-Opus en código y trabajo agéntico a $3/$15 por MTok. El nicho de Opus se achicó mucho — y **Opus 5.5** ($4/$20, contra $5/$25 de Opus 5, y menos tokens por tarea resuelta) vuelve a acortar algo la brecha de costo, así que la fila de Opus de abajo es menos lujo que antes.
 
 Nota de consumo: Sonnet 5 usa un tokenizador nuevo (~30% más tokens por el mismo texto que 4.6) y trae thinking adaptativo activado por defecto — si comparás consumos entre versiones en `/usage`, esa diferencia es esperable y no significa que esté trabajando de más.
+
+Nota Opus 5.5: en effort `medium` iguala o supera a Opus 5 en `high` con cerca de la mitad de los tokens, y en `xhigh`/`max` piensa más por turno que Opus 5. No arrastres un effort calibrado para Opus 5 a sesiones con Opus 5.5 — arrancá en `medium`.
 
 | Tarea | Modelo |
 |---|---|

@@ -62,6 +62,7 @@ Auth, billing, permissions, security, migrations, data loss, shared state, cachi
 - Grep before read; read ranges, not whole files; never re-read what's unchanged in context.
 - Noisy ops (test suites, log inspection, large-file summaries) run inside subagents so only the summary reaches this thread.
 - Your own output is terse: decisions and diffs, not essays; no restating the plan back at the user.
+- Effort: Opus 5.5 at `medium` already beats Opus 5 at `high` with about half the tokens, and thinks longer per turn at `xhigh`/`max`. Don't carry an Opus 5 effort setting over; if the session is over-thinking routine orchestration, suggest lowering effort rather than prompting for brevity.
 
 ## Final gate
 
