@@ -38,7 +38,34 @@ fi
 
 # 4. Bloque global -> ~/.claude/CLAUDE.md (versionado por marcadores <!-- fable-discipline vN -->)
 #    Reemplaza SOLO lo que esta entre marcadores cuando la version cambia; el resto del
-#    archivo del usuario nunca se toca. Un bloque viejo sin marcadores se avisa, no se pisa.
+#    archivo del usuario nunca se toca. Un bloque legado SIN marcadores (instalaciones
+#    anteriores a agosto 2026, que dejaban a Opus en fable-opus) se migra solo: backup de
+#    CLAUDE.md y reemplazo del tramo legado por el bloque versionado; lo que haya antes
+#    y despues del tramo queda intacto.
+migrate_legacy_block() {  # $1 = CLAUDE.md, $2 = archivo con el bloque nuevo; imprime la ruta del backup
+    local bak="$1.bak-$(date +%Y%m%d-%H%M%S)"
+    cp -f "$1" "$bak"
+    awk -v blockfile="$2" '
+        function emit_block(   line) { while ((getline line < blockfile) > 0) print line; close(blockfile) }
+        NR==FNR {  # pasada 1: ubicar el tramo legado
+            n=NR; L[NR]=$0
+            if (!hdr && $0=="# fable discipline (per-model working rules)") hdr=NR
+            if ($0=="# subagent routing (fixed-model delegation)") subhdr=NR
+            next
+        }
+        FNR==1 {
+            start=hdr  # el comentario legado "Contenido para agregar..." venia pegado arriba del header
+            for (i=hdr-1; i>=1 && i>=hdr-7; i--) if (L[i] ~ /^<!-- Contenido para agregar/) { start=i; break }
+            anchor=(subhdr>hdr) ? subhdr : hdr  # el tramo termina donde termina la ultima seccion nuestra
+            end=n
+            for (i=anchor+1; i<=n; i++) if (L[i] ~ /^# / || L[i] ~ /^<!-- fable-discipline/) { end=i-1; break }
+            while (end>anchor && L[end] ~ /^[[:space:]]*$/) end--
+        }
+        FNR<start || FNR>end { print; next }  # pasada 2: copiar lo de afuera, reemplazar el tramo
+        FNR==start { emit_block() }
+    ' "$1" "$1" > "$1.tmp" && mv "$1.tmp" "$1"
+    echo "$bak"
+}
 claude_md="$claude_dir/CLAUDE.md"
 tmp_block="$(mktemp)"
 trap 'rm -f "$tmp_block"' EXIT
@@ -61,9 +88,10 @@ elif grep -q '<!-- fable-discipline v' "$claude_md" && grep -q '<!-- /fable-disc
         ' "$claude_md" > "$claude_md.tmp" && mv "$claude_md.tmp" "$claude_md"
         echo "  bloque global actualizado $inst_ver -> $repo_ver (el resto de CLAUDE.md queda intacto)"
     fi
-elif grep -q "fable discipline" "$claude_md"; then
-    echo "  AVISO: CLAUDE.md tiene un bloque fable-discipline viejo SIN marcadores."
-    echo "         Borralo a mano y re-corre este script; de ahi en adelante se actualiza solo."
+elif grep -q '^# fable discipline (per-model working rules)' "$claude_md"; then
+    bak="$(migrate_legacy_block "$claude_md" "$tmp_block")"
+    echo "  bloque legado SIN marcadores migrado a $repo_ver (backup: $bak)"
+    echo "  Si tenias notas propias dentro de las secciones viejas (# fable discipline / # git / # subagent routing), recuperalas del backup."
 else
     printf '\n' >> "$claude_md"
     cat "$tmp_block" >> "$claude_md"

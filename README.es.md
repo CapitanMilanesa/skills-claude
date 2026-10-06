@@ -51,7 +51,7 @@ Un comando (idempotente — sirve también para actualizar):
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-Copia todos los skills a `~/.claude/skills/`, los agentes a `~/.claude/agents/`, y mantiene al día el bloque de `CLAUDE.global.md` dentro de `~/.claude/CLAUDE.md`: el bloque vive entre marcadores versionados `<!-- fable-discipline vN -->`, así que el instalador lo reemplaza cuando el repo sube la versión — y nunca toca nada que tengas fuera de los marcadores. (Un bloque viejo sin marcadores se avisa, no se pisa: borralo una vez, re-corré el script, y de ahí en adelante se actualiza solo.)
+Copia todos los skills a `~/.claude/skills/`, los agentes a `~/.claude/agents/`, y mantiene al día el bloque de `CLAUDE.global.md` dentro de `~/.claude/CLAUDE.md`: el bloque vive entre marcadores versionados `<!-- fable-discipline vN -->`, así que el instalador lo reemplaza cuando el repo sube la versión — y nunca toca nada que tengas fuera de los marcadores. (Un bloque legado sin marcadores — de instalaciones anteriores a agosto 2026, que todavía ruteaban Opus a `fable-opus` — se migra solo: el instalador hace backup de `CLAUDE.md` en `CLAUDE.md.bak-<timestamp>`, cambia las secciones viejas por el bloque versionado y deja todo lo demás en su lugar.)
 
 En macOS/Linux: `bash install.sh` (espejo del instalador de PowerShell).
 
@@ -81,13 +81,13 @@ Los skills solo pueden *sugerir* un `/model` — el cambio lo ejecutás vos. La 
 | `ejecutor` | Sonnet | Ejecutar un plan ya escrito (archivos + cambios exactos + comandos de verificación), paso a paso con verificación. Reporte ≤20 líneas; tests reportan solo fallos. |
 | `revisor` | Opus | Debugging profundo, revisión sensible a seguridad, auditar trabajo riesgoso de agentes más baratos. Caro — usar solo cuando Sonnet no alcanza. Reporte ≤40 líneas, conclusión primero. |
 
-El modelo principal los invoca solo cuando corresponde (sus `description` disparan la delegación) y, por regla del `CLAUDE.md` global, **anuncia cada delegación en una línea antes de lanzarla** — p. ej. `→ Delegando búsqueda a explorador (Haiku)` — y al final reporta qué modelo hizo qué. Así una sesión en Fable gasta Fable solo en pensar: la exploración corre en Haiku y la ejecución en Sonnet, sin comandos manuales.
+El modelo principal los invoca solo cuando corresponde (sus `description` disparan la delegación) y, por regla del `CLAUDE.md` global, **anuncia cada delegación en una línea antes de lanzarla** — p. ej. `→ Delegando búsqueda a explorador (Haiku)` — y al final reporta qué modelo hizo qué. Así una sesión en Fable gasta Fable solo en pensar: la exploración corre en Haiku y la ejecución en Sonnet, sin comandos manuales. Solo estos tres cuentan como delegación: los agentes built-in de Claude Code (`Explore`, `general-purpose`, `Plan`) no tienen modelo fijo y heredan el de la sesión, así que lanzados desde Opus o Fable gastan tokens de Opus/Fable más el overhead del briefing — el bloque global los prohíbe y el hook del ledger los marca.
 
 Instalación: copiar `agents/*.md` a `~/.claude/agents/`.
 
 ## Hook de observabilidad (opcional)
 
-Un libro contable de delegaciones: escribe una línea JSONL por cada corrida de subagente en `~/.claude/delegation-log.jsonl` con métricas limpias — qué agente corrió, cuántas líneas tuvo su reporte, su cap de contrato, y si se pasó. Cuando un reporte viola su cap, además imprime un aviso de una línea (solo en la violación — señal, no ruido). Es **solo observabilidad** — nunca bloquea, nunca falla un turno. (Se evaluó "forzar el cap rehaciendo el reporte" y se descartó: rehacer un subagente para recortar un reporte gasta mucha más cuota que leerlo largo una vez. Los caps viven en los prompts de los agentes; este hook hace las violaciones *visibles* y *contables*.)
+Un libro contable de delegaciones: escribe una línea JSONL por cada corrida de subagente en `~/.claude/delegation-log.jsonl` con métricas limpias — qué agente corrió, cuántas líneas tuvo su reporte, su cap de contrato, y si se pasó. Cuando un reporte viola su cap, o la delegación fue a un agente built-in que hereda el modelo de la sesión, además imprime un aviso de una línea (solo en la violación — señal, no ruido). Es **solo observabilidad** — nunca bloquea, nunca falla un turno. (Se evaluó "forzar el cap rehaciendo el reporte" y se descartó: rehacer un subagente para recortar un reporte gasta mucha más cuota que leerlo largo una vez. Los caps viven en los prompts de los agentes; este hook hace las violaciones *visibles* y *contables*.)
 
 `install.ps1` / `install.sh` copian el script a `~/.claude/hooks/`, pero **no** tocan tu `settings.json` (auto-editar la config ajena es más riesgo que beneficio). Para activarlo, agregá esto a `~/.claude/settings.json` bajo `hooks` (en macOS/Linux usá `python3`):
 

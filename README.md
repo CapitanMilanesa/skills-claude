@@ -51,7 +51,7 @@ One command (idempotent — also how you update):
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-Copies every skill to `~/.claude/skills/`, the agents to `~/.claude/agents/`, and keeps the `CLAUDE.global.md` block inside `~/.claude/CLAUDE.md` up to date: the block lives between versioned `<!-- fable-discipline vN -->` markers, so the installer replaces it whenever the repo bumps the version — and never touches anything you keep outside the markers. (A legacy block without markers is reported, not overwritten: delete it once, re-run, and from then on it updates itself.)
+Copies every skill to `~/.claude/skills/`, the agents to `~/.claude/agents/`, and keeps the `CLAUDE.global.md` block inside `~/.claude/CLAUDE.md` up to date: the block lives between versioned `<!-- fable-discipline vN -->` markers, so the installer replaces it whenever the repo bumps the version — and never touches anything you keep outside the markers. (A legacy block without markers — from installs before August 2026, which still routed Opus to `fable-opus` — is migrated automatically: the installer backs `CLAUDE.md` up to `CLAUDE.md.bak-<timestamp>`, swaps the old sections for the versioned block and leaves everything else in place.)
 
 On macOS/Linux: `bash install.sh` (mirror of the PowerShell installer).
 
@@ -81,13 +81,13 @@ Skills can only *suggest* a `/model` switch — you execute it. The only genuine
 | `ejecutor` (executor) | Sonnet | Executes an already-written plan (files + exact changes + verification commands), step by step with verification. Report ≤20 lines; tests report failures only. |
 | `revisor` (reviewer) | Opus | Deep debugging, security-sensitive review, auditing risky work from cheaper agents. Expensive — only when Sonnet-level reasoning isn't enough. Report ≤40 lines, conclusion first. |
 
-The main model invokes them on its own when appropriate (their `description` fields trigger the delegation) and, per the global `CLAUDE.md` rule, **announces every delegation in one line before spawning** — e.g. `→ Delegating search to explorador (Haiku)` — and reports at the end which model did which part. That way a Fable session spends Fable only on thinking: exploration runs on Haiku and execution on Sonnet, with no manual commands.
+The main model invokes them on its own when appropriate (their `description` fields trigger the delegation) and, per the global `CLAUDE.md` rule, **announces every delegation in one line before spawning** — e.g. `→ Delegating search to explorador (Haiku)` — and reports at the end which model did which part. That way a Fable session spends Fable only on thinking: exploration runs on Haiku and execution on Sonnet, with no manual commands. Only these three count as delegation: Claude Code's built-in agents (`Explore`, `general-purpose`, `Plan`) have no pinned model and inherit the session's, so spawned from Opus or Fable they burn Opus/Fable tokens plus briefing overhead — the global block forbids them, and the ledger hook flags them.
 
 Installation: copy `agents/*.md` to `~/.claude/agents/`.
 
 ## Observability hook (optional)
 
-A delegation ledger: logs one JSONL line per subagent run to `~/.claude/delegation-log.jsonl` with clean metrics — which agent ran, how many lines its report had, its contract cap, and whether it went over. When a report exceeds its cap it also prints a one-line warning (only on the violation — signal, not noise). It's **observability only** — never blocks, never fails a turn. (Hard "enforce the cap by re-running the agent" was considered and dropped: re-running a subagent to trim a report costs far more quota than reading the long report once. The caps live in the agent prompts; this hook makes violations *visible* and *countable*.)
+A delegation ledger: logs one JSONL line per subagent run to `~/.claude/delegation-log.jsonl` with clean metrics — which agent ran, how many lines its report had, its contract cap, and whether it went over. When a report exceeds its cap, or the delegation went to a built-in agent that inherits the session's model, it also prints a one-line warning (only on the violation — signal, not noise). It's **observability only** — never blocks, never fails a turn. (Hard "enforce the cap by re-running the agent" was considered and dropped: re-running a subagent to trim a report costs far more quota than reading the long report once. The caps live in the agent prompts; this hook makes violations *visible* and *countable*.)
 
 `install.ps1` / `install.sh` copy the script to `~/.claude/hooks/`, but do **not** touch your `settings.json` (auto-editing someone's settings is riskier than it's worth). To activate, add this to `~/.claude/settings.json` under `hooks` (use `python3` on macOS/Linux):
 

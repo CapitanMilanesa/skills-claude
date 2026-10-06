@@ -48,13 +48,14 @@ Same chat, with Test 3's work done.
 
 Fresh chat on Fable. One multi-part task (e.g. map a flow across layers with references, spot missing validation, and propose — without implementing — the top 3 improvements).
 
-- ✅ Invokes `fable-chief`; delegates exploration (ideally in parallel) with announcements; does NOT chain more than ~3 of its own searches; the final answer closes with which model did which part.
+- ✅ Invokes `fable-chief`; its first tool call is an `explorador` spawn; delegates exploration (ideally in parallel) with announcements; any Grep/Read/Bash of its own comes with a `directo: <reason>` line; never spawns `Explore` / `general-purpose` / `Plan` (they inherit Fable); the final answer closes with which model did which part.
 
 ## Test 6 — Opus as chief (default)
 
 Fresh chat → `/model opus` → a task like Test 5's (no manual invocation — `opus-chief` is the default for Opus sessions).
 
 - ✅ Invokes `opus-chief` on its own; same chief behavior as Test 5, with the in-session escalation ladder topping out at Opus (offers a Fable switch, with handoff, if a problem defeats it).
+- ✅ Its first tool call on the repo is an `explorador` spawn, and every delegation goes to `explorador` / `ejecutor` / `revisor`. ❌ A spawn of `Explore`, `general-purpose` or `Plan` is a fail: those inherit Opus. ❌ Two or more of its own Grep/Read/Bash in a row without a `directo: <reason>` line is a fail.
 
 ## Test 7 — Non-code task (fabrication guard)
 
@@ -79,4 +80,5 @@ Running the six tests end-to-end on a real repo usually converges fast (later te
 
 - **Guardrails that fire too late.** A skill invoked on the first *big* request instead of the first response, or a guardrail that asks scoping questions before stopping. Fix: tighten the trigger wording in `CLAUDE.global.md` / the skill.
 - **Delegations without a declared contract.** If the delegating model doesn't restate the agent's line cap, reports come back bloated. Fix is already in `CLAUDE.global.md` (Goal/Scope/Contract/Done template).
+- **Opus "not delegating".** Two causes seen in the field — check in this order. (1) A stale global block: `grep -n "fable-discipline v\|Claude Opus" ~/.claude/CLAUDE.md` must show the current version and `Claude Opus → opus-chief`; an old block without markers routed Opus to `fable-opus`, and installers before 2026-08-21 never updated it (today's installer migrates it, with a backup). (2) Delegating to Claude Code's built-in agents (`Explore`, `general-purpose`, `Plan`), which inherit Opus — the ledger shows them as `agent_type`, and the hook flags them.
 - **Tolerances worth accepting knowingly:** Haiku doesn't reliably count its own tool calls (a hard budget is guidance, not a mechanism — a `PostToolUse` hook is the real enforcement if you need it); the report line-cap yields to genuine inventory tasks (a 40-item list won't fit in 15 lines).
