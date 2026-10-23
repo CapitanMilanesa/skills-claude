@@ -14,7 +14,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 # macOS/Linux:
 bash install.sh
 ```
-Para actualizar después: `git pull` + volver a correr el script.
+Para actualizar después: `git pull` + volver a correr el script. Mantené también Claude Code actualizado (`claude update`): un CLI viejo usa en silencio la generación anterior de modelos.
 
 ## 2. Regla de oro — elegí el modelo según la tarea
 

@@ -6,9 +6,11 @@ Run each test in a **fresh chat** (auto-invocation depends on the `CLAUDE.md` lo
 
 ## Step 0 — Setup (once, ~5 min)
 
+0. `claude --version` must be ≥ 2.1.280. An older CLI resolves the `opus`/`sonnet`/`haiku` aliases to previous-generation models (2.1.212: Opus 4.8 / Sonnet 5 / Haiku 4.5) and invalidates the whole campaign — run `claude update` first.
 1. Open the solution's root folder in your editor.
 2. Clean git state (`git status`) or create a `test-claude` branch. If the project isn't under git, back up before Test 3 (the only one that edits).
-3. In a `/model sonnet` chat, run **`/init`** to generate the project's `CLAUDE.md`. Review and keep it — it improves every later test and every future session.
+3. Pick a repo big enough that reading everything is not an option (dozens of files, several layers). On a handful of files every model — correctly — reads directly, and Tests 2, 5 and 6 measure nothing.
+4. In a `/model sonnet` chat, run **`/init`** to generate the project's `CLAUDE.md`. Review and keep it — it improves every later test and every future session.
 
 ## Test 1 — Haiku: auto-invocation + guardrail
 
@@ -25,7 +27,7 @@ Run each test in a **fresh chat** (auto-invocation depends on the `CLAUDE.md` lo
 
 - Prompt: a broad "where/how does X work" question about the codebase.
   - ✅ Invokes `fable-sonnet`; prints `→ Delegating search to explorador (Haiku)`; agent visible in the UI; report with `path:line` refs (≤15 lines); final answer based on that.
-  - ❌ Note if it explores itself with several of its own Grep/Read calls instead of delegating.
+  - ❌ Note if it explores itself with several of its own Grep/Read calls instead of delegating — and whether it said why (`directo: <reason>`). A justified direct read on a tiny scope is acceptable; a silent one is the deviation.
 
 ## Test 3 — Sonnet: small change with ONE verification
 
@@ -48,14 +50,14 @@ Same chat, with Test 3's work done.
 
 Fresh chat on Fable. One multi-part task (e.g. map a flow across layers with references, spot missing validation, and propose — without implementing — the top 3 improvements).
 
-- ✅ Invokes `fable-chief`; its first tool call is an `explorador` spawn; delegates exploration (ideally in parallel) with announcements; any Grep/Read/Bash of its own comes with a `directo: <reason>` line; never spawns `Explore` / `general-purpose` / `Plan` (they inherit Fable); the final answer closes with which model did which part.
+- ✅ Invokes `fable-chief`; on a repo where reading everything is not an option, its first tool call is an `explorador` spawn (on a handful of files, a `directo: <reason>` line followed by one batch of reads is the expected behavior); delegates exploration (ideally in parallel) with announcements; any further Grep/Read/Bash of its own comes with a `directo: <reason>` line; never spawns `Explore` / `general-purpose` / `Plan` (they inherit Fable); the final answer closes with which model did which part.
 
 ## Test 6 — Opus as chief (default)
 
 Fresh chat → `/model opus` → a task like Test 5's (no manual invocation — `opus-chief` is the default for Opus sessions).
 
 - ✅ Invokes `opus-chief` on its own; same chief behavior as Test 5, with the in-session escalation ladder topping out at Opus (offers a Fable switch, with handoff, if a problem defeats it).
-- ✅ Its first tool call on the repo is an `explorador` spawn, and every delegation goes to `explorador` / `ejecutor` / `revisor`. ❌ A spawn of `Explore`, `general-purpose` or `Plan` is a fail: those inherit Opus. ❌ Two or more of its own Grep/Read/Bash in a row without a `directo: <reason>` line is a fail.
+- ✅ On a repo where reading everything is not an option, its first tool call is an `explorador` spawn, and every delegation goes to `explorador` / `ejecutor` / `revisor` (on a handful of files, `directo: <reason>` plus one batch of reads is the expected behavior). ❌ A spawn of `Explore`, `general-purpose` or `Plan` is a fail: those inherit Opus. ❌ Two or more of its own Grep/Read/Bash in a row without a `directo: <reason>` line is a fail.
 
 ## Test 7 — Non-code task (fabrication guard)
 
@@ -82,4 +84,5 @@ Running the six tests end-to-end on a real repo usually converges fast (later te
 - **Delegations without a declared contract.** If the delegating model doesn't restate the agent's line cap, reports come back bloated. Fix is already in `CLAUDE.global.md` (Goal/Scope/Contract/Done template).
 - **Opus "not delegating".** Two causes seen in the field — check in this order. (1) A stale global block: `grep -n "fable-discipline v\|Claude Opus" ~/.claude/CLAUDE.md` must show the current version and `Claude Opus → opus-chief`; an old block without markers routed Opus to `fable-opus`, and installers before 2026-08-21 never updated it (today's installer migrates it, with a backup). (2) Delegating to Claude Code's built-in agents (`Explore`, `general-purpose`, `Plan`), which inherit Opus — the ledger shows them as `agent_type`, and the hook flags them.
 - **Haiku 5.5 (under the `haiku` alias since 2026-10-14).** Re-run Tests 1 and 7: the §0 gate must still fire on architecture work, but expect better instruction following and fewer invented APIs. If a Test 3-sized change also passes cleanly on `/model haiku`, consider widening the Haiku row of the routing table — Haiku 5.5 is 20x cheaper than Sonnet 5.5 per token.
+- **Nobody delegates on a small repo.** Seen on a 5-file fixture (2026-10-23): Sonnet, Opus and Fable all read every file directly; the chiefs said so with `directo:`, Sonnet didn't. That is correct behavior for the scope, not a skill failure — Step 0 now asks for a repo big enough to make delegation the cheaper move.
 - **Tolerances worth accepting knowingly:** Haiku doesn't reliably count its own tool calls (a hard budget is guidance, not a mechanism — a `PostToolUse` hook is the real enforcement if you need it); the report line-cap yields to genuine inventory tasks (a 40-item list won't fit in 15 lines).

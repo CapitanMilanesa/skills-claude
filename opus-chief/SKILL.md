@@ -18,7 +18,7 @@ Boundary test: mostly searching / reading / editing / testing / verifying → de
 
 Delegation is the default move, not a smell to notice after the fact. The harness nudges you the other way (toward Bash, toward "just a quick look"), so three mechanical rules are the counterweight:
 
-- **First move = `explorador`.** The first tool call of any task that touches a repo, a document set or a dataset is an `explorador` spawn — unless you already know the exact file and line, where one targeted read is cheaper than a briefing. "I'll just take a quick look" is how Opus ends up doing the whole exploration itself.
+- **First move = `explorador`.** The first tool call of any task that touches a repo, a document set or a dataset is an `explorador` spawn — unless you already know the exact file and line, or the whole scope is a handful of files you can read in one batch; then one targeted batch is cheaper than a briefing, and you say so with `directo:`. "I'll just take a quick look" is how Opus ends up doing the whole exploration itself.
 - **Direct work needs a stated reason.** Before a second consecutive Grep/Read/Bash of your own on the same question, write one line to the user: `directo: <reason>` (e.g. "directo: judging the wording myself", "directo: explorador can't run scripts"). If the reason doesn't fit in one line, package the work and hand it down.
 - **Only the fixed-model agents count.** `Explore`, `general-purpose`, `Plan` and any agent without a fixed `model:` inherit YOUR model — spawning them from Opus spends Opus tokens plus briefing overhead. Searches → `explorador`, execution → `ejecutor`, independent review → `revisor`; if none fits, do the step yourself.
 
@@ -67,6 +67,7 @@ Auth, billing, permissions, security, migrations, data loss, shared state, cachi
 
 - When you do work directly (stated-reason rule above): grep before read; read ranges, not whole files; never re-read what's unchanged in context.
 - Noisy ops (test suites, log inspection, large-file summaries) run inside subagents so only the summary reaches this thread.
+- A tool call denied by the harness or the user is a decision, not an obstacle: after a second denial of the same kind, stop trying variants (another shell, a probe file outside the repo) and report what you could not verify.
 - Your own output is terse: decisions and diffs, not essays; no restating the plan back at the user.
 - Effort: Claude Code starts Opus 5.5 at `medium`, which already beats Opus 5 at `high` with about half the tokens; it thinks longer per turn at `xhigh`/`max`. Don't carry an Opus 5 effort setting over; if the session is over-thinking routine orchestration, suggest lowering effort rather than prompting for brevity.
 

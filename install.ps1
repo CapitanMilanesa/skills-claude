@@ -103,5 +103,23 @@ if (-not (Test-Path $claudeMd)) {
     }
 }
 
+# 5. Version de Claude Code: un CLI viejo resuelve los alias opus/sonnet/haiku a modelos de la
+#    generacion anterior en silencio (2.1.212: Opus 4.8, Sonnet 5, Haiku 4.5) y ni siquiera
+#    acepta los IDs 5.5, asi que toda la calibracion de los skills aplica a modelos que no corren.
+$ccMin = [version]"2.1.280"
+if (Get-Command claude -ErrorAction SilentlyContinue) {
+    $ccRaw = ""
+    try { $ccRaw = (& claude --version | Out-String) } catch { $ccRaw = "" }
+    $ccMatch = [regex]::Match($ccRaw, '\d+\.\d+\.\d+')
+    if ($ccMatch.Success) {
+        $ccVer = [version]$ccMatch.Value
+        if ($ccVer -lt $ccMin) {
+            Write-Host "  AVISO: Claude Code $ccVer es anterior a ${ccMin}: los alias opus/sonnet/haiku apuntan a modelos viejos. Corre 'claude update'."
+        } else {
+            Write-Host "  Claude Code $ccVer (ok, >= $ccMin)"
+        }
+    }
+}
+
 Write-Host ""
 Write-Host "Listo. Los cambios aplican en sesiones nuevas (o /clear en las abiertas)."

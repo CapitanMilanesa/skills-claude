@@ -14,7 +14,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 # macOS/Linux:
 bash install.sh
 ```
-Update later: `git pull` + rerun the script.
+Update later: `git pull` + rerun the script. Keep Claude Code itself updated too (`claude update`): an old CLI silently uses the previous generation of models.
 
 ## 2. Golden rule — pick the model for the task
 

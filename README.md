@@ -28,7 +28,7 @@ Each skill is self-contained and calibrated to its model's typical failure modes
 
 ## Task routing (quick guide — Sonnet 5.5 / Opus 5.5 / Haiku 5.5)
 
-With **Sonnet 5.5** routing gets simpler: near-Opus quality on coding and agentic work at $2/$10 per MTok, and far fewer requests per task than Sonnet 5. Opus's niche shrank a lot — and **Opus 5.5** ($4/$20, down from Opus 5's $5/$25, and fewer tokens per solved task) is now only 2x Sonnet per token, so the Opus row below is less of a luxury than it was. **Haiku 5.5** ($0.10/$0.50 per MTok for prompts up to 100K tokens, $0.50/$2.50 above; 1M context) is 20x cheaper than Sonnet and substantially better than Haiku 4.5 at following instructions and at running as a subagent — the Haiku row and the `explorador` agent got cheaper and better at once. The `haiku`/`sonnet`/`opus` aliases (and the agents' `model:` fields) always resolve to the newest version of each family, so nothing needs re-pinning.
+With **Sonnet 5.5** routing gets simpler: near-Opus quality on coding and agentic work at $2/$10 per MTok, and far fewer requests per task than Sonnet 5. Opus's niche shrank a lot — and **Opus 5.5** ($4/$20, down from Opus 5's $5/$25, and fewer tokens per solved task) is now only 2x Sonnet per token, so the Opus row below is less of a luxury than it was. **Haiku 5.5** ($0.10/$0.50 per MTok for prompts up to 100K tokens, $0.50/$2.50 above; 1M context) is 20x cheaper than Sonnet and substantially better than Haiku 4.5 at following instructions and at running as a subagent — the Haiku row and the `explorador` agent got cheaper and better at once. The `haiku`/`sonnet`/`opus` aliases (and the agents' `model:` fields) always resolve to the newest version of each family — on an up-to-date Claude Code (see Installation) — so nothing needs re-pinning.
 
 Consumption note: Sonnet 5 / 5.5 count ~30% more tokens for the same text than Sonnet 4.6 (Haiku 5.5 vs 4.5, same ~30%), and all three current models ship with adaptive thinking on by default — if you compare versions in `/usage`, that gap is expected and doesn't mean they're overworking.
 
@@ -56,6 +56,8 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 Copies every skill to `~/.claude/skills/`, the agents to `~/.claude/agents/`, and keeps the `CLAUDE.global.md` block inside `~/.claude/CLAUDE.md` up to date: the block lives between versioned `<!-- fable-discipline vN -->` markers, so the installer replaces it whenever the repo bumps the version — and never touches anything you keep outside the markers. (A legacy block without markers — from installs before August 2026, which still routed Opus to `fable-opus` — is migrated automatically: the installer backs `CLAUDE.md` up to `CLAUDE.md.bak-<timestamp>`, swaps the old sections for the versioned block and leaves everything else in place.)
 
 On macOS/Linux: `bash install.sh` (mirror of the PowerShell installer).
+
+**Keep Claude Code itself up to date (≥ 2.1.280).** The `opus`/`sonnet`/`haiku` aliases — in `/model`, in `settings.json` and in the agents' `model:` fields — resolve to the newest model *of the Claude Code version you run*. An old CLI silently pins the previous generation (2.1.212 resolved `opus` to Opus 4.8, `sonnet` to Sonnet 5 and `haiku` to Haiku 4.5, and refused the 5.5 model IDs outright), so every calibration in these skills applies to models you are not actually running. Check with `claude --version`, update with `claude update`; the installer prints a warning when the CLI is too old.
 
 ## Automatic per-model assignment (recommended)
 

@@ -98,5 +98,24 @@ else
     echo "  bloque global anexado a CLAUDE.md ($repo_ver)"
 fi
 
+# 5. Version de Claude Code: un CLI viejo resuelve los alias opus/sonnet/haiku a modelos de la
+#    generacion anterior en silencio (2.1.212: Opus 4.8, Sonnet 5, Haiku 4.5) y ni siquiera
+#    acepta los IDs 5.5, asi que toda la calibracion de los skills aplica a modelos que no corren.
+cc_min="2.1.280"
+if command -v claude >/dev/null 2>&1; then
+    cc_ver="$( (claude --version 2>/dev/null || true) | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)"
+    if [ -n "$cc_ver" ]; then
+        IFS=. read -r a1 a2 a3 <<< "$cc_ver"; IFS=. read -r b1 b2 b3 <<< "$cc_min"
+        older=0
+        if [ "$a1" -lt "$b1" ] || { [ "$a1" -eq "$b1" ] && [ "$a2" -lt "$b2" ]; } \
+           || { [ "$a1" -eq "$b1" ] && [ "$a2" -eq "$b2" ] && [ "$a3" -lt "$b3" ]; }; then older=1; fi
+        if [ "$older" = 1 ]; then
+            echo "  AVISO: Claude Code $cc_ver es anterior a $cc_min: los alias opus/sonnet/haiku apuntan a modelos viejos. Corre 'claude update'."
+        else
+            echo "  Claude Code $cc_ver (ok, >= $cc_min)"
+        fi
+    fi
+fi
+
 echo ""
 echo "Listo. Los cambios aplican en sesiones nuevas (o /clear en las abiertas)."
