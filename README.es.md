@@ -1,6 +1,6 @@
-# skills-fable
+# claude-model-router
 
-🇬🇧 [English version](README.md) · 👥 [Guía rápida del equipo](USAGE.es.md)
+🇬🇧 [English version](README.md) · 👥 [Guía rápida del equipo](USAGE.es.md) · 📦 [github.com/CapitanMilanesa/skills-claude](https://github.com/CapitanMilanesa/skills-claude)
 
 Skills de disciplina de trabajo para usar Opus, Sonnet y Haiku en Claude Code con la eficiencia de Fable, y así cuidar el límite semanal de uso.
 

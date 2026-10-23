@@ -72,7 +72,7 @@ Same task, fresh chat on `/model sonnet`:
 
 ## After
 
-Bring observed deviations to a `skills-fable` session to tune the skill/agent wording with real data.
+Bring observed deviations to a `claude-model-router` session to tune the skill/agent wording with real data.
 
 ---
 
