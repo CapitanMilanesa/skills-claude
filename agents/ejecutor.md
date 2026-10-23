@@ -2,6 +2,7 @@
 name: ejecutor
 description: Use to execute an already-written, self-contained plan - explicit files, exact changes, and verification commands. Runs on Sonnet. Pass the FULL plan in the prompt; it applies it step by step with verification and reports deviations instead of improvising. Not for open-ended design or debugging without a plan.
 model: sonnet
+effort: medium
 tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 

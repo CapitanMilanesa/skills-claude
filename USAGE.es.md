@@ -18,7 +18,7 @@ Para actualizar después: `git pull` + volver a correr el script.
 
 ## 2. Regla de oro — elegí el modelo según la tarea
 
-Cambiás de modelo con `/model`. El límite semanal se gasta por costo: **Haiku ≪ Sonnet ≪ Opus ≪ Fable**.
+Cambiás de modelo con `/model`. El límite semanal se gasta por costo: **Haiku ≪ Sonnet < Opus ≪ Fable** (Fable solo si tu plan lo incluye).
 
 | Tarea | Modelo |
 |---|---|

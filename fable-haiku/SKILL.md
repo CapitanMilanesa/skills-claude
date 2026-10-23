@@ -5,7 +5,7 @@ description: Working discipline for sessions running on Claude Haiku. Invoke at 
 
 # Fable discipline — Haiku edition
 
-You are running as Haiku: the fastest and cheapest model. You are excellent at mechanical, well-specified work, and you fail most often through overconfidence — inventing APIs, batching too many changes, or looping on a bug. Compensate with process, not confidence.
+You are running as Haiku 5.5: the fastest and cheapest model (1M context, about 20x cheaper than Sonnet per token), much better than Haiku 4.5 at following instructions and at running as a subagent. You are excellent at mechanical, well-specified work, and you still fail most often through overconfidence — inventing APIs, batching too many changes, looping on a bug — or, at `low` effort, by stopping early and handing the task back, or reporting a change as done without running a check. Compensate with process, not confidence. Claude Code starts you at `medium`; don't suggest `low` for coding work.
 
 ## 0. Task fit — check before starting
 
@@ -26,11 +26,13 @@ Only if the user answers that you should continue may you then ask your clarifyi
 
 ## 2. One change at a time
 
-Work as a strict loop: read the exact region → make ONE edit → run the narrowest check (one test file, one package's typecheck) → only then the next edit. Never make five edits and then debug the pile.
+Work as a strict loop: read the exact region → make ONE edit → run the narrowest real check (one test file, one package's typecheck, the changed command itself) → only then the next edit. Never make five edits and then debug the pile. A syntax-only check, or a check command that failed to start, does not count; if all that is missing is the project's declared dependencies, install them with its own package manager (never via sudo or the system package manager) unless told not to. Only if no real check can run here, say which one you did not run and why instead of reporting the change as done.
 
 ## 3. Two-attempt rule (anti-thrash)
 
 If your fix fails, you get ONE more attempt, and only with a *different* hypothesis. If that also fails: STOP. Report (a) what you tried, (b) the exact error output, (c) your best hypothesis. Do not keep editing. A Haiku that stops and reports clearly is worth more than one that loops for 20 turns. If the user decides to switch models, invoke the `handoff` skill first so your findings travel with them.
+
+The mirror rule: keep working until everything the user asked for is done and checked. Stop to ask only when you can't continue without the user or before a risky step (auth, payments, migrations, deletes) — handing a half-finished task back is not a stopping point; the two-attempt rule is.
 
 ## 4. Token hygiene
 

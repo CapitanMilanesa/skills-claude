@@ -2,6 +2,7 @@
 name: explorador
 description: Use PROACTIVELY for any broad search or understanding question over code, documents, or data - "where is X", "how does Y work", "which files touch Z", "what does the document say about W". Runs on Haiku (minimal quota cost). Read-only; returns conclusions with file:line references, never file dumps. Not for editing files or running commands.
 model: haiku
+effort: medium
 tools: Glob, Grep, Read
 ---
 

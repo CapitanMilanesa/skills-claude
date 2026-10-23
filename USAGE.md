@@ -18,7 +18,7 @@ Update later: `git pull` + rerun the script.
 
 ## 2. Golden rule — pick the model for the task
 
-Switch with `/model`. The weekly limit burns by cost: **Haiku ≪ Sonnet ≪ Opus ≪ Fable**.
+Switch with `/model`. The weekly limit burns by cost: **Haiku ≪ Sonnet < Opus ≪ Fable** (Fable only if your plan includes it).
 
 | Task | Model |
 |---|---|

@@ -8,7 +8,7 @@ Skills de disciplina de trabajo para usar Opus, Sonnet y Haiku en Claude Code co
 
 ## La idea
 
-El límite semanal se consume ponderado por el costo del modelo: **Haiku ≪ Sonnet ≪ Opus ≪ Fable**. La forma más barata de trabajar no es solo "usar el modelo chico", sino:
+El límite semanal se consume por modelo, y cuanto más barato el modelo menos límite quema: **Haiku ≪ Sonnet < Opus ≪ Fable** (precios de lista de la API, oct 2026, por MTok entrada/salida: Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10, Opus 5.5 $4/$20, Fable 5.1 $10/$50 — el límite semanal sigue ese orden, aunque Anthropic no publica las proporciones exactas). La forma más barata de trabajar no es solo "usar el modelo chico", sino:
 
 1. **Rutear cada tarea al modelo más barato que la resuelve bien** (fallar 40 turnos en Haiku sale más caro que resolverla de una en Sonnet).
 2. **Imponer la disciplina de proceso de Fable** en el modelo que sea: buscar antes de leer, leer solo rangos, llamadas paralelas, diffs mínimos, verificar antes de declarar "listo", y cortar en vez de insistir en loop.
@@ -18,30 +18,32 @@ Cada skill es autocontenido y está calibrado a los modos de falla típicos de s
 | Skill | Modelo | Corrige principalmente |
 |---|---|---|
 | `/fable-haiku` | Haiku | Inventa APIs, se traba en loops, encara tareas que le quedan grandes |
-| `/fable-sonnet` | Sonnet | Declara victoria sin verificar, explora/edita de más |
+| `/fable-sonnet` | Sonnet | Reporta un cambio como listo sin una verificación real (sobre todo en effort `low`), devuelve tareas antes de terminarlas, explora/edita de más |
 | `/fable-opus` | Opus | Sobre-ingeniería, exploración sin timebox, no devuelve el trabajo mecánico a modelos baratos |
 | `/fable-chief` | Fable | Hacer trabajo de peón con razonamiento premium; orquesta la flota de subagentes con contratos de retorno estrictos y escalado con evidencia (adaptado del charter de [pranshugupta54](https://gist.github.com/pranshugupta54/f38869565e17c72c6b07767b371c2c65)) |
 | `/opus-chief` | Opus (como jefe) | Director default de las sesiones de Opus: mismo rol de orquestador que `fable-chief`, adaptado a que Opus es a la vez decisor y razonador más profundo de la flota (la escalera de escalado termina en él dentro de la sesión; `revisor` vale por ojos frescos, no por razonamiento superior) |
 | `/handoff` | cualquiera | Traspaso estandarizado al cambiar de modelo o sesión: escribe `.claude/handoff.md` con objetivo, estado verificado, **qué se probó y falló** (evita redescubrir callejones), próximos pasos y decisiones ya tomadas. En la sesión nueva: "Leé .claude/handoff.md y continuá" |
 
-**Esquema default:** las sesiones de Opus cargan `opus-chief` (Opus dirige la flota); `fable-opus` queda disponible con `/fable-opus` para sesiones especialista sin orquestación. Fable es la alternativa premium explícita: se cambia con `/model` y toma `fable-chief`.
+**Esquema default:** las sesiones de Opus cargan `opus-chief` (Opus dirige la flota); `fable-opus` queda disponible con `/fable-opus` para sesiones especialista sin orquestación. Si tu plan incluye Fable, es la alternativa premium explícita: se cambia con `/model` y toma `fable-chief`.
 
-## Ruteo de tareas (guía rápida — Sonnet 5)
+## Ruteo de tareas (guía rápida — Sonnet 5.5 / Opus 5.5 / Haiku 5.5)
 
-Con **Sonnet 5** (familia Claude 5) el ruteo se simplifica: alcanza calidad casi-Opus en código y trabajo agéntico a $3/$15 por MTok. El nicho de Opus se achicó mucho — y **Opus 5.5** ($4/$20, contra $5/$25 de Opus 5, y menos tokens por tarea resuelta) vuelve a acortar algo la brecha de costo, así que la fila de Opus de abajo es menos lujo que antes.
+Con **Sonnet 5.5** el ruteo se simplifica: alcanza calidad casi-Opus en código y trabajo agéntico a $2/$10 por MTok, y resuelve cada tarea en muchas menos requests que Sonnet 5. El nicho de Opus se achicó mucho — y **Opus 5.5** ($4/$20, contra $5/$25 de Opus 5, y menos tokens por tarea resuelta) cuesta hoy solo 2x Sonnet por token, así que la fila de Opus de abajo es menos lujo que antes. **Haiku 5.5** ($0.10/$0.50 por MTok con prompts de hasta 100K tokens, $0.50/$2.50 por encima; contexto 1M) es 20x más barato que Sonnet y bastante mejor que Haiku 4.5 siguiendo instrucciones y como subagente — la fila de Haiku y el agente `explorador` se abarataron y mejoraron a la vez. Los alias `haiku`/`sonnet`/`opus` (y el `model:` de los agentes) resuelven siempre a la versión más nueva de cada familia, así que no hay nada que re-fijar.
 
-Nota de consumo: Sonnet 5 usa un tokenizador nuevo (~30% más tokens por el mismo texto que 4.6) y trae thinking adaptativo activado por defecto — si comparás consumos entre versiones en `/usage`, esa diferencia es esperable y no significa que esté trabajando de más.
+Nota de consumo: Sonnet 5 / 5.5 cuentan ~30% más tokens por el mismo texto que Sonnet 4.6 (Haiku 5.5 contra 4.5, el mismo ~30%), y los tres modelos actuales traen thinking adaptativo activado por defecto — si comparás consumos entre versiones en `/usage`, esa diferencia es esperable y no significa que estén trabajando de más.
 
 Nota Opus 5.5: en effort `medium` iguala o supera a Opus 5 en `high` con cerca de la mitad de los tokens, y en `xhigh`/`max` piensa más por turno que Opus 5. No arrastres un effort calibrado para Opus 5 a sesiones con Opus 5.5 — arrancá en `medium`.
+
+Nota de effort: Claude Code arranca Opus 5.5, Sonnet 5.5 y Haiku 5.5 en `medium` (se cambia con `/effort` o con `modelSettings` en `settings.json`). Los niveles de Sonnet 5.5 están recalibrados: `medium` es el arranque correcto para código agéntico; en `low` es más propenso a saltear la verificación o a devolver la tarea antes de terminar, y por eso `fable-sonnet` y `fable-haiku` fijan un piso de verificación.
 
 | Tarea | Modelo |
 |---|---|
 | Renames, boilerplate, ediciones repetitivas, docs, tests que copian tests existentes, ejecutar un plan ya escrito | **Haiku** (`/model haiku`) |
-| Casi todo lo demás: features, bugs (con o sin repro), refactors, diseño, concurrencia — lo que antes iba a Opus | **Sonnet 5** (`/model sonnet`) |
+| Casi todo lo demás: features, bugs (con o sin repro), refactors, diseño, concurrencia — lo que antes iba a Opus | **Sonnet 5.5** (`/model sonnet`) |
 | Corridas autónomas muy largas (overnight, refactors masivos sin supervisión) | **Opus** (`/model opus`) |
-| Solo lo que sobrevivió dos intentos bien especificados en Sonnet, o trabajo crítico de máxima complejidad | **Fable** |
+| Solo lo que sobrevivió dos intentos bien especificados en Sonnet, o trabajo crítico de máxima complejidad | **Fable** (solo si tu plan lo incluye) |
 
-Patrón que más ahorra: **el modelo caro escribe el plan → Sonnet/Haiku lo ejecutan** — y hoy, para la mayoría de los planes, "el modelo caro" también puede ser Sonnet 5. Los tres skills incluyen instrucciones para proponer ese escalado/des-escalado solos.
+Patrón que más ahorra: **el modelo caro escribe el plan → Sonnet/Haiku lo ejecutan** — y hoy, para la mayoría de los planes, "el modelo caro" también puede ser Sonnet 5.5. Los tres skills incluyen instrucciones para proponer ese escalado/des-escalado solos.
 
 ## Instalación
 

@@ -57,7 +57,7 @@ A wall of raw output is a failed task regardless of whether the work was correct
 - revisor and a cheaper agent disagree → you decide; agents never re-litigate each other.
 - Escalation always carries the prior failure evidence forward so nothing gets rediscovered.
 
-No model above you runs inside this session. If a problem defeats you too, tell the user plainly what was tried and what the evidence shows, then offer the one remaining escalation: switching the session to Fable — generate a handoff first (`handoff` skill) so the premium model starts from your evidence instead of from zero.
+No model above you runs inside this session. If a problem defeats you too, tell the user plainly what was tried and what the evidence shows, then offer what remains: if the plan includes Fable, switching the session to Fable — generate a handoff first (`handoff` skill) so the premium model starts from your evidence instead of from zero; otherwise a `revisor` pass on the failure evidence (fresh context, same model) and a fresh Opus session from that handoff at higher effort (`/effort xhigh`).
 
 ## High-risk areas
 
@@ -68,7 +68,7 @@ Auth, billing, permissions, security, migrations, data loss, shared state, cachi
 - When you do work directly (stated-reason rule above): grep before read; read ranges, not whole files; never re-read what's unchanged in context.
 - Noisy ops (test suites, log inspection, large-file summaries) run inside subagents so only the summary reaches this thread.
 - Your own output is terse: decisions and diffs, not essays; no restating the plan back at the user.
-- Effort: Opus 5.5 at `medium` already beats Opus 5 at `high` with about half the tokens, and thinks longer per turn at `xhigh`/`max`. Don't carry an Opus 5 effort setting over; if the session is over-thinking routine orchestration, suggest lowering effort rather than prompting for brevity.
+- Effort: Claude Code starts Opus 5.5 at `medium`, which already beats Opus 5 at `high` with about half the tokens; it thinks longer per turn at `xhigh`/`max`. Don't carry an Opus 5 effort setting over; if the session is over-thinking routine orchestration, suggest lowering effort rather than prompting for brevity.
 
 ## Final gate
 

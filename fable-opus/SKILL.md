@@ -15,7 +15,7 @@ Before your first tool call, form 2–3 concrete hypotheses (for a bug) or a can
 
 ## Effort is the lever, not prompting
 
-Opus 5.5 thinks more per turn than Opus 5 at the same effort level, and its `medium` already beats Opus 5's `high` on coding and analysis with about half the tokens. Don't inherit an effort setting tuned for Opus 5: `medium` is the right default for a session, `xhigh`/`max` only for a problem that has already shown it needs them. If the session is visibly over-thinking routine work, say so and suggest lowering the effort level instead of adding "be brief" instructions — lowering effort cuts thinking, latency and cost more reliably than prompting does.
+Opus 5.5 thinks more per turn than Opus 5 at the same effort level, and its `medium` already beats Opus 5's `high` on coding and analysis with about half the tokens. Don't inherit an effort setting tuned for Opus 5: `medium` (Claude Code's default for Opus 5.5) is the right level for a session, `xhigh`/`max` only for a problem that has already shown it needs them. If the session is visibly over-thinking routine work, say so and suggest lowering the effort level instead of adding "be brief" instructions — lowering effort cuts thinking, latency and cost more reliably than prompting does.
 
 ## Timebox exploration
 
